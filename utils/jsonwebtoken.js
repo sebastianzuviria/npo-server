@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const { modelName } = require('../../../alkemylabsjs/balance-api/models/operation')
 
 const loginUser = (dataUser) => {
     const token = jwt.sign(
@@ -7,13 +6,25 @@ const loginUser = (dataUser) => {
         process.env.SECRET 
     )
 
-    return (
-        response
-            .status(200)
-            .send({token, ...dataUser})
-    )
+    return response.status(200).send({token, ...dataUser})
+    
+}
+
+const decodeToken = (request) => {  
+    const authorization = request.get('authorization')
+           
+    if(authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        request.token = authorization.substring(7)
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        if (request.token || decodedToken.id) {
+            return decodedToken  
+        } 
+    } else {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
 }
 
 module.exports = {
-    loginUser
+    loginUser,
+    decodeToken
 }
