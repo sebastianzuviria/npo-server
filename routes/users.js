@@ -5,9 +5,6 @@ const { body, validationResult } = require('express-validator');
 // Import models
 const { User } = require('../models/index');
 
-// Import Database Connection Object
-const db = require('../db/database');
-
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -29,19 +26,35 @@ router.post('/auth/register',
     })
   }
 
-  // Register user to the database
-  User.create({ 
-    firstName: req.body.firstName, 
-    lastName: req.body.lastName, 
-    email: req.body.email, 
-    password: req.body.password 
-  })
+  // Check if user is already registered
+  User.findOne({ where: { email: req.body.email } })
   .then(user => {
-    console.log('New user to be registered', user);
-    res.status(200).json({
-      'message': 'User registered successfuly',
-      'user': user
-    })
+    if (!user) {
+      // Register user to the database
+      User.create({ 
+        firstName: req.body.firstName, 
+        lastName: req.body.lastName, 
+        email: req.body.email, 
+        password: req.body.password 
+      })
+      .then(newUser => {
+        res.status(201).json({
+          'message': 'User registered successfuly',
+          'user': newUser
+        })
+      })
+      .catch(error => {
+        res.status(500).json({
+          'message': 'Could not register user',
+          'error': error.message
+        })
+      })
+    }
+    else {
+      res.status(409).json({
+        'message': 'User already registered'
+      })
+    }
   })
   .catch(error => {
     res.status(500).json({
