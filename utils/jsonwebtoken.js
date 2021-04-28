@@ -20,7 +20,7 @@ const decodeToken = (request) => {
             return decodedToken;  
         } else {
             return response.status(401).json({ error: 'token invalid' });
-        }
+        };
     } else {
         return response.status(401).json({ error: 'token missing' });
     };
