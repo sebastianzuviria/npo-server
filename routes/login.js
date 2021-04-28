@@ -16,7 +16,7 @@ router
       const user = await getUser('email', email);
       if (!user) res.status(404).json({ ok: false });
 
-      const passIsOk = verifyPassword(password, user.password);
+      const passIsOk = await verifyPassword(password, user.password);
       if (!passIsOk) res.status(400).json({ ok: false });
 
       // JWT implementation
@@ -24,7 +24,6 @@ router
 
       res.status(200).json(user);
     } catch (err) {
-      //console.log(err);
       res.status(500).json({ ok: false });
     }
   });
