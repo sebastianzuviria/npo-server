@@ -1,19 +1,18 @@
-// const {getDecodedToken} = require('') 
+const {decodeToken} = require('jsonwebtoken') //ruta editar segun corresponda
+
 module.exports = {
 
-    
     verifyAdmin: async (req, res, next) => {
         
-        const {roleId} = req.body
-        
         try{
-            const {roleId} = await getDecodedToken(req);
+            const {roleId} = decodeToken(req);
+            
             const isRole = await users.findByPk(roleId,{
 
                 attributes:['id']
 
             })
-
+            
             if (roleId !== isRole) throw new Error('Not authorized')
             next()
             
@@ -23,6 +22,5 @@ module.exports = {
         }
         
     }
-    
-
+        
 }
