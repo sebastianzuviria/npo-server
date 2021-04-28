@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 
 // Import models
@@ -30,25 +31,37 @@ router.post('/auth/register',
   User.findOne({ where: { email: req.body.email } })
   .then(user => {
     if (!user) {
-      // Register user to the database
-      User.create({ 
-        firstName: req.body.firstName, 
-        lastName: req.body.lastName, 
-        email: req.body.email, 
-        password: req.body.password 
+      // Hash password
+      bcrypt.hash(req.body.password, 10, function(err, hashedPassword) {
+        if (err) {
+          res.status(500).json({
+            'message': 'Could not register user',
+            'error': err
+          })
+        }
+        else {
+          // Register user to the database
+          User.create({ 
+            firstName: req.body.firstName, 
+            lastName: req.body.lastName, 
+            email: req.body.email, 
+            password: hashedPassword
+          })
+          .then(newUser => {
+            res.status(201).json({
+              'message': 'User registered successfuly',
+              'user': newUser
+            })
+          })
+          .catch(error => {
+            res.status(500).json({
+              'message': 'Could not register user',
+              'error': error.message
+            })
+          })
+        } 
       })
-      .then(newUser => {
-        res.status(201).json({
-          'message': 'User registered successfuly',
-          'user': newUser
-        })
-      })
-      .catch(error => {
-        res.status(500).json({
-          'message': 'Could not register user',
-          'error': error.message
-        })
-      })
+
     }
     else {
       res.status(409).json({
