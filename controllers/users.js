@@ -1,9 +1,7 @@
 const User = require("../models/user");
 
-const decodeToken = require("../models/user");
 
 const infoUser = async (req, res) => {
-
 
      try {
         const user = await User.findAll({
