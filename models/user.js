@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     image: DataTypes.STRING,
     password: DataTypes.STRING,
-    roleId: DataTypes.INTEGER,
-    deletedAt: DataTypes.DATE
+    roleId: DataTypes.INTEGER
   }, {
     sequelize,
+    paranoid: true,
     modelName: 'User',
   });
   return User;
