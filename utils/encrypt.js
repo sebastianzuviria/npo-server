@@ -17,7 +17,7 @@ const saltRounds = 10; // Can be placed in an eviroment variable
 //     })
 // }
 
-module.exports = encryptPassword = async (password) => {
+async function encryptPassword (password) {
     let saltRounds = await bcrypt.genSalt(saltRounds);
 
     if (saltRounds) {
@@ -34,3 +34,5 @@ module.exports = encryptPassword = async (password) => {
         return 0;
     }
 }
+
+module.exports = encryptPassword;
