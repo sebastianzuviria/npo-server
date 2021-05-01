@@ -1,4 +1,4 @@
-const {decodeToken} = require('jsonwebtoken') //ruta editar segun corresponda
+const {decodeToken} = require('../utils/jsonwebtoken');
 
 module.exports = {
 
