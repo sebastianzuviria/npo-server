@@ -1,6 +1,6 @@
 const router = require('./index');
 const { body, validationResult } = require('express-validator');
-const postActivity = require('../controllers/activities')
+const { postActivity } = require('../controllers/activities')
 
 router.post('/activities',
     body('content', 'Content is mandatory').notEmpty(),
@@ -17,7 +17,7 @@ router.post('/activities',
         }
     
         // Proceed
-        postActivity;
+        postActivity(req, res);
 
 });
 

@@ -6,7 +6,7 @@ module.exports = {
 
     postActivity: async (req, res) => {
 
-        const { content, image, name } = request.body;
+        const { content, image, name } = req.body;
 
         try {
 
@@ -15,7 +15,7 @@ module.exports = {
                 image,
                 name
             });
-            return response.json( { message: 'Activity posted successfuly' } ); // Improve response? 
+            return res.json( { message: 'Activity posted successfully' } ); // Improve response? 
 
         } catch (error) {
 
