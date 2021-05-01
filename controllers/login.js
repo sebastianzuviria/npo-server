@@ -1,6 +1,6 @@
 const { User } = require('../models/index');
 const verifyPassword = require('../utils/verifyPassword');
-const { loginUser } = require('../utils');
+//const { loginUser } = require('../utils');
 //const {loginUser} = require('../utils/jsonwebtoken);
 
 const login = async (req, res) => {
