@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const {getUsers} = require('../controllers/users.controllers')
+const { verifyAdmin } = require('../middlewares/verifyRoles');
+const {getUsers} = require('../controllers/users.controllers');
 
 /* GET users listing. */
-router.get('/', getUsers);
+router.get('/', verifyAdmin, getUsers);
 
 module.exports = router;
