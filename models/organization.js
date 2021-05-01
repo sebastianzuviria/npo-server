@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Organization extends Model {}
-  User.init(
+  Organization.init(
     {
       name: DataTypes.STRING,
       image: DataTypes.STRING,
