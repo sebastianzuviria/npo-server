@@ -1,4 +1,3 @@
-const {getUser} = require('../controllers/users.controllers');
 const login = require('../controllers/login');
 const isEmail = require('../middlewares/isEmail');
 const passwordLength = require('../middlewares/passwordLength');
