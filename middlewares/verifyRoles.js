@@ -5,7 +5,7 @@ module.exports = {
     verifyAdmin: async (req, res, next) => {
         
         try{
-            const {roleId} = decodeToken(req);
+            const {roleId} = decodeToken(req, res);
             
             const isRole = await users.findByPk(roleId,{
 
