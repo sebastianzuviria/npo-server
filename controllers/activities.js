@@ -40,7 +40,7 @@ module.exports = {
             // Get the updated activity
             const updatedActivity = await Activity.findByPk( id );
 
-            return res.json( updatedActivity );
+            return ( !updatedActivity ) ? res.status(400).send( { error: 'Activity does not exist' } ) : res.json( updatedActivity );
 
         } catch (error) {
 
