@@ -2,6 +2,10 @@
 
 const { User } = require('../models/index');
 
+const { body, validationResult } = require('express-validator');
+
+const bcrypt = require('bcrypt');
+
 module.exports = {
 
     deleteUser: async (req, res) => {
@@ -19,5 +23,4 @@ module.exports = {
 
         } 
     }
-
 }
