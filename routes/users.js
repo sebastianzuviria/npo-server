@@ -18,7 +18,7 @@ router.get('/', getUsers);
 router.delete('/:id', deleteUser);
 
 //Get the information of the authenticated user
-router.get('/auth/me',infouser);
+router.get('/auth/me/:id',infouser);
 /* POST a new user (register) */
 router.post(
   '/auth/register',
