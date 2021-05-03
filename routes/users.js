@@ -1,13 +1,15 @@
 var express = require('express');
 var router = express.Router();
+const infouser =require('../controllers/users');
+
+const {getUsers} = require('../controllers/users.controllers')
 var bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 
 // Import models
 const { User } = require('../models/index');
-const { getUsers } = require('../controllers/users.controllers');
 
-const { deleteUser } = require('../controllers/user');
+const { deleteUser} = require('../controllers/user');
 
 /* GET users listing. */
 router.get('/', getUsers);
@@ -15,6 +17,8 @@ router.get('/', getUsers);
 /* DELETE (soft or logical) from DB */
 router.delete('/:id', deleteUser);
 
+//Get the information of the authenticated user
+router.get('/auth/me/:id',infouser);
 /* POST a new user (register) */
 router.post(
   '/auth/register',
