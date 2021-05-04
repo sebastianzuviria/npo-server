@@ -13,7 +13,7 @@ module.exports = {
                 attributes:['roleId']
 
             })
-            console.log(response)
+            
             const isRole = response.dataValues["roleId"];
             
             if (roleId !== isRole) throw new Error('Not authorized')
