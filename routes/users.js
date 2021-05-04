@@ -3,6 +3,7 @@ var router = express.Router();
 
 const { verifyAdmin } = require('../middlewares/verifyRoles');
 const { getUsers } = require('../controllers/users.controllers');
+const infouser =require('../controllers/users');
 
 var bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
@@ -10,7 +11,7 @@ const { body, validationResult } = require('express-validator');
 // Import models
 const { User } = require('../models/index');
 
-const { deleteUser } = require('../controllers/user');
+const { deleteUser} = require('../controllers/user');
 
 /* GET users listing. */
 router.get('/', verifyAdmin, getUsers);
@@ -18,6 +19,8 @@ router.get('/', verifyAdmin, getUsers);
 /* DELETE (soft or logical) from DB */
 router.delete('/:id', deleteUser);
 
+//Get the information of the authenticated user
+router.get('/auth/me/:id',infouser);
 /* POST a new user (register) */
 router.post(
   '/auth/register',

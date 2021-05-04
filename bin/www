@@ -84,6 +84,7 @@ function onError(error) {
  */
 
 function onListening() {
+  console.log('Servidor inicializado')
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
