@@ -1,19 +1,23 @@
 const {decodeToken} = require('../utils/jsonwebtoken');
+const { User } = require('../models/index');
 
 module.exports = {
 
     verifyAdmin: async (req, res, next) => {
         
         try{
-            const {roleId} = decodeToken(req, res);
+            const { roleId, id } = decodeToken(req, res);
             
-            const isRole = await users.findByPk(roleId,{
+            const response = await User.findByPk(id,{
 
-                attributes:['id']
+                attributes:['roleId']
 
             })
+
+            const isRole = response.dataValues["roleId"].toString();
             
             if (roleId !== isRole) throw new Error('Not authorized')
+
             next()
             
         }catch(error){
