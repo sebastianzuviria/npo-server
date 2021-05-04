@@ -13,15 +13,15 @@ module.exports = {
                 attributes:['roleId']
 
             })
-
-            const isRole = response.dataValues["roleId"].toString();
+            console.log(response)
+            const isRole = response.dataValues["roleId"];
             
             if (roleId !== isRole) throw new Error('Not authorized')
 
             next()
             
         }catch(error){
-            // return next({status: 403, error: error.message}) (manejos de errores consultar)
+            
             res.status(403).json({status: 403, error: error.message})
         }
         
