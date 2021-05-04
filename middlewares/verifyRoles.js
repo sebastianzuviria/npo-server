@@ -1,11 +1,11 @@
-const {decodeToken} = require('../utils/jsonwebtoken') //ruta editar segun corresponda
+const {decodeToken} = require('../utils/jsonwebtoken');
 
 module.exports = {
 
     verifyAdmin: async (req, res, next) => {
         
         try{
-            const {roleId} = decodeToken(req);
+            const {roleId} = decodeToken(req, res);
             
             const isRole = await users.findByPk(roleId,{
 
