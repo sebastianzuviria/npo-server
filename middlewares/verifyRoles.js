@@ -6,16 +6,16 @@ module.exports = {
     verifyAdmin: async (req, res, next) => {
         
         try{
-            const { roleId } = decodeToken(req, res);
+            const { roleId, id } = decodeToken(req, res);
             
-            const response = await User.findByPk(roleId,{
+            const response = await User.findByPk(id,{
 
                 attributes:['roleId']
 
             })
 
             const isRole = response.dataValues["roleId"].toString();
-            console.log(isRole)
+            
             if (roleId !== isRole) throw new Error('Not authorized')
 
             next()
