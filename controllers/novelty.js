@@ -39,10 +39,31 @@ const getNoveltyById = async (request, response) => {
     }
 }
 
+const deleteNovelty = async (request, response) => {
+    const id = request.params.id
+
+    try {
+        const noveltyToDelete = await Novelty.findByPk(id)
+        if(noveltyToDelete) {
+            await Novelty.destroy({
+                where: {
+                    id: id
+                }
+            })
+            response.status(204).json({ message: 'New deleted' })
+        } else {
+            response.status(400).json({ error: 'New not exist' })
+        }
+    } catch (error) {
+        response.status(400).json({ error: error.message })
+    }
+}
+
 
 const noveltyController = {
     getNovelties,
-    getNoveltyById
+    getNoveltyById,
+    deleteNovelty
 }
 
 module.exports = noveltyController
