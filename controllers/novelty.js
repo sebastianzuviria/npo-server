@@ -7,12 +7,14 @@ const getNovelties = async (request, response) => {
             // include: {
             //     model: Category,
             //     attributes: ['name']
-            // }, 
-            attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
+            // },
+            where: {
+                type: 'news'
+            }, 
+            attributes: ['id', 'title', 'image', 'createdAt'],
             order: [['createdAt', 'DESC']]
         })
-        console.log(noveltiesReturned)
-        response.json(noveltiesReturned)
+        response.status(200).json(noveltiesReturned)
     } catch (error) {
         response.status(400).json({ error: error.message })
     }
