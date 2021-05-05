@@ -8,11 +8,11 @@ const getNovelties = async (request, response) => {
             //     model: Category,
             //     attributes: ['name']
             // }, 
-            attributes: ['id', 'name', 'image', 'content', 'categoryId', 'type', 'createdAt'],
+            attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
             order: [['createdAt', 'DESC']]
         })
         console.log(noveltiesReturned)
-        response.json( {message: 'Return all novelties'} )
+        response.json(noveltiesReturned)
     } catch (error) {
         response.status(400).json({ error: error.message })
     }
@@ -27,12 +27,10 @@ const getNoveltyById = async (request, response) => {
             //     model: Category,
             //     attributes: ['name']
             // },
-            attributes: ['id', 'name', 'image', 'content', 'categoryId', 'type', 'createdAt'],
+            attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
         })
-        //if (newReturned){ 
-            //response.json(newReturned)
-        if(id){ //This if is only for test
-            response.json({ message: 'novelty returned by id'})
+        if (noveltyReturned){ 
+            response.json(noveltyReturned)
         } else {
             response.status(400).json({ error: 'new not exist' })
         }
