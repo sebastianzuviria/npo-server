@@ -65,7 +65,7 @@ module.exports = {
     oneActivity: async (req,res)=>{
         try{
 
-            const activity = await Activity.findAll({where:{id:req.params.id}});
+            const activity = await Activity.findOne({where:{id:req.params.id}});
             
 
             if(activity.length === 0){
