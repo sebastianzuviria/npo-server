@@ -132,7 +132,8 @@ const noveltyController = {
     getNovelties,
     getNoveltyById,
     deleteNovelty,
-    createNovelty
+    createNovelty,
+    updateNovelty
 }
 
 module.exports = noveltyController
