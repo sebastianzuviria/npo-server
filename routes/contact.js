@@ -2,8 +2,7 @@ const nameLength = require('../middlewares/nameLength');
 const isEmail = require('../middlewares/isEmail');
 const validateBody = require('../middlewares/validateBody');
 const { verifyAdmin } = require('../middlewares/verifyRoles');
-const newContact = require('../controllers/contact');
-const getContacts = require('../controllers/contact');
+const { newContact, getContacts } = require('../controllers/contact');
 
 const router = require('express').Router();
 
