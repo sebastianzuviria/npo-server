@@ -1,33 +1,27 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('socialmediacontacts', {
+    await queryInterface.createTable('Organizations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      facebook: {
+      name: {
         type: Sequelize.STRING
       },
-      linkedin: {
+      image: {
         type: Sequelize.STRING
       },
-      instagram: {
+      phone: {
         type: Sequelize.STRING
       },
-      organizationId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: {
-            tableName: 'organizations',
-            schema: 'schema'
-          },
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+      address: {
+        type: Sequelize.STRING
+      },
+      welcomeText: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +34,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('socialmediacontacts');
+    await queryInterface.dropTable('Organizations');
   }
 };
