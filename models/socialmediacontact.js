@@ -4,13 +4,10 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Socialmediacontact extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+
     static associate(models) {
-      // define association here
+      Socialmediacontact.belongsTo(models.Organization, {as: 'organizationcontact', foreignKey:"organizationId"});
+
     }
   };
   Socialmediacontact.init({
@@ -31,14 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isUrl: true
       }
-    },
-    OrganizationId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Organization,
-        key: 'id'
-      }
-  }
+    }
   }, {
     sequelize,
     modelName: 'Socialmediacontact',
