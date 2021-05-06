@@ -15,8 +15,8 @@ const login = async (req, res) => {
     if (!passIsOk) {
       return res.status(400).json({ ok: false, msg: "Password doesn't match" });
     } else {
-      const { password, ...dataForToken } = user.dataValues;
-      signToken(dataForToken, res);
+      const { id, roleId, image, firstName, lastName, email } = user.dataValues;
+      signToken({ id, roleId, image, firstName, lastName, email }, res);
     }
   } catch (err) {
     console.log(err);
