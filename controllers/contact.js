@@ -36,4 +36,4 @@ const getContacts = async (req, res) => {
   }
 }
 
-module.exports = newContact, getContacts;
+module.exports = { newContact, getContacts };
