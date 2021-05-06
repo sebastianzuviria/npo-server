@@ -14,9 +14,31 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Socialmediacontact.init({
-    facebook: DataTypes.STRING,
-    instagram: DataTypes.STRING,
-    linkedin: DataTypes.STRING
+    facebook:{
+      type:DataTypes.STRING,
+      validate: {
+        isUrl: true
+      }
+    } ,
+    instagram:{
+      type:DataTypes.STRING,
+      validate: {
+        isUrl: true
+      }
+    },
+    linkedin:{
+      type:DataTypes.STRING,
+      validate: {
+        isUrl: true
+      }
+    },
+    OrganizationId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Organization,
+        key: 'id'
+      }
+  }
   }, {
     sequelize,
     modelName: 'Socialmediacontact',
