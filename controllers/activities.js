@@ -63,9 +63,10 @@ module.exports = {
     },
 
     oneActivity: async (req,res)=>{
+        const id = req.params.id;
         try{
 
-            const activity = await Activity.findOne({where:{id:req.params.id}});
+            const activity = await Activity.findByPk(id);
             
 
             if(activity.length === 0){
