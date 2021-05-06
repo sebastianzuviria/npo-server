@@ -4,3 +4,5 @@ const { verifyAdmin } = require('../middlewares/verifyRoles');
 const { getCategories } = require('../controllers/categories');
 
 router.get('/', verifyAdmin, getCategories);
+
+module.exports = router;
