@@ -95,6 +95,38 @@ const createNovelty = async (request, response) => {
     }    
 }
 
+const updateNovelty = async (request, response) => {
+    const id = request.params.id
+    const body = request.body;
+    const validationErrors = validationResult(request);
+
+    // Check for validation errors
+    if (!validationErrors.isEmpty()) {
+      response.status(400).json({
+        validationErrors: validationErrors.array()
+      }).end();
+    } else {
+      try {
+        // const category = await Category.findOne({ where: { name: body.category }});
+        // if(category) {
+        const newNovelty = await Novelty.update({
+            title: body.title,
+            image: body.image,
+            content: body.content,
+            //categoryId: category.id
+            categoryId: 1,
+            type: 'news'
+        }, { where: { id: id } });
+            response.status(201).json(newNovelty);
+        // } else {
+        //   response.status(400).json({ error: 'category not exist'});  
+        // }
+      } catch (error) {
+        response.status(400).json({ error: error.message });
+      }
+    }    
+}
+
 
 const noveltyController = {
     getNovelties,
