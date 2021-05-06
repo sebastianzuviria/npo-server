@@ -109,15 +109,20 @@ const updateNovelty = async (request, response) => {
       try {
         // const category = await Category.findOne({ where: { name: body.category }});
         // if(category) {
-        const newNovelty = await Novelty.update({
-            title: body.title,
-            image: body.image,
-            content: body.content,
-            //categoryId: category.id
-            categoryId: 1,
-            type: 'news'
-        }, { where: { id: id } });
-            response.status(201).json(newNovelty);
+            const isUpdatedNovelty = await Novelty.update({
+                title: body.title,
+                image: body.image,
+                content: body.content,
+                //categoryId: category.id
+                categoryId: 1,
+                type: 'news'
+            }, { where: { id: id } });
+            if(isUpdatedNovelty[0] === 1) {
+                const updatedNovelty = await Novelty.findByPk(id)
+                response.status(200).json(updatedNovelty);
+            } else {
+                response.status(400).json({ error: 'New not exist'})
+            } 
         // } else {
         //   response.status(400).json({ error: 'category not exist'});  
         // }
