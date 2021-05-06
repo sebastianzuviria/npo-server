@@ -1,5 +1,4 @@
 const { Testimonial } = require("../models/index");
-const { validationResult } = require("express-validator");
 
 const getTestimonials = async (req, res) => {
   try {
@@ -39,26 +38,16 @@ const getTestimonialById = async (req, res) => {
 
 const newTestimonial = async (req, res) => {
   const body = req.body;
-  const validation = validationResult(req);
 
-  if (!validation.isEmpty()) {
-    res
-      .status(400)
-      .json({
-        validation: validation.array(),
-      })
-      .end();
-  } else {
-    try {
-      const newTestimonial = await Testimonial.create({
-        name: body.name,
-        content: body.content,
-        type: "testimonials",
-      });
-      res.status(201).json(newTestimonial);
-    } catch (error) {
-      res.status(400).json({ status: 400, error: error.message });
-    }
+  try {
+    const newTestimonial = await Testimonial.create({
+      name: body.name,
+      content: body.content,
+      type: "testimonials",
+    });
+    res.status(201).json(newTestimonial);
+  } catch (error) {
+    res.status(400).json({ status: 400, error: error.message });
   }
 };
 
