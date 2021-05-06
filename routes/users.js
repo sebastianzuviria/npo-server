@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const { verifyAdmin } = require('../middlewares/verifyRoles');
-const { getUsers } = require('../controllers/users.controllers');
+const { getUsers, getUser } = require('../controllers/users.controllers');
 const infouser =require('../controllers/users');
 
 var bcrypt = require('bcrypt');
@@ -14,7 +14,10 @@ const { User } = require('../models/index');
 const { deleteUser} = require('../controllers/user');
 
 /* GET users listing. */
-router.get('/', verifyAdmin, getUsers);
+router.get('/',  getUsers);
+
+router.get('/:id',  getUser);
+
 
 /* DELETE (soft or logical) from DB */
 router.delete('/:id', deleteUser);

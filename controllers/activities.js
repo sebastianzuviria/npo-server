@@ -47,5 +47,38 @@ module.exports = {
             res.status(400).send(error.message);
 
         } 
+    },
+
+    listActivity: async (req,res)=>{
+        try{
+
+            const activities = await Activity.findAll();
+            return res.status(200).json(activities)
+            
+        }catch(error){
+            
+            res.status(400).json({status: 400, error: error.message})
+
+        }
+    },
+
+    oneActivity: async (req,res)=>{
+        try{
+
+            const activity = await Activity.findAll({where:{id:req.params.id}});
+            
+
+            if(activity.length === 0){
+                return res.status(404).json({ msg: 'Activity not Found'});
+            }
+            else{
+                return res.status(200).json(activity);
+            }
+            
+        }catch(error){
+            
+            res.status(400).json({status: 400, error: error.message})
+
+        }
     }
 }
