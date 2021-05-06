@@ -1,5 +1,7 @@
 const { Novelty } = require('../models/index');
 // const { Category } = require('../models/index')
+const { validationResult } = require('express-validator');
+
 
 const getNovelties = async (request, response) => {
 
@@ -64,32 +66,41 @@ const deleteNovelty = async (request, response) => {
 
 const createNovelty = async (request, response) => {
     const body = request.body;
+    const validationErrors = validationResult(request);
 
-    try {
+    // Check for validation errors
+    if (!validationErrors.isEmpty()) {
+      response.status(400).json({
+        validationErrors: validationErrors.array()
+      }).end();
+    } else {
+      try {
         // const category = await Category.findOne({ where: { name: body.category }});
         // if(category) {
-            const newNovelty = await Novelty.create({
-                title: body.title,
-                image: body.image,
-                content: body.content,
-                //categoryId: category.id
-                categoryId: 1,
-                type: 'news'
-            });
+        const newNovelty = await Novelty.create({
+            title: body.title,
+            image: body.image,
+            content: body.content,
+            //categoryId: category.id
+            categoryId: 1,
+            type: 'news'
+        });
             response.status(201).json(newNovelty);
         // } else {
         //   response.status(400).json({ error: 'category not exist'});  
         // }
-    } catch (error) {
+      } catch (error) {
         response.status(400).json({ error: error.message });
-    }
+      }
+    }    
 }
 
 
 const noveltyController = {
     getNovelties,
     getNoveltyById,
-    deleteNovelty
+    deleteNovelty,
+    createNovelty
 }
 
 module.exports = noveltyController

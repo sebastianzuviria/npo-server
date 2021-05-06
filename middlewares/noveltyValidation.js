@@ -1,12 +1,12 @@
 const { body } = require('express-validator');
-const { Category } = require('../models/index')
+//const { Category } = require('../models/index')
 
 
 const noveltyValidation = [
-    body('title').not().isEmpty().trim(),
-    body('image').not().isEmpty().trim(),
-    body('content').not().isEmpty().trim(),
-    body('category').not().isEmpty().trim()
+    body('title', 'title not valid').exists({ checkNull: true }).isLength({ min: 1 }),
+    body('image', 'image not valid').exists({ checkNull: true }).isLength({ min: 1 }),
+    body('content', 'content not valid').exists({ checkNull: true }).isLength({ min: 1 }),
+    body('category', 'category not valid').exists({ checkNull: true }).isLength({ min: 1 })
     // body('category').custom(async (category) => {
     //     const returnedCategory = await Category.findOne({ where: { name: category}})
     //       if (!returnedCategory) {
