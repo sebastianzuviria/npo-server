@@ -3,14 +3,7 @@ const { Testimonial } = require("../models/index");
 const getTestimonials = async (req, res) => {
   try {
     const testimonials = await Testimonial.findAll({
-      where: { type: "testimonials" },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
-      include: {
-        model: Testimonial,
-        attributes: ["name", "content"],
-      },
+      attributes: ["name", "content", "id"],
     });
     res.status(200).json(testimonials);
   } catch (error) {
@@ -43,7 +36,6 @@ const newTestimonial = async (req, res) => {
     const newTestimonial = await Testimonial.create({
       name: body.name,
       content: body.content,
-      type: "testimonials",
     });
     res.status(201).json(newTestimonial);
   } catch (error) {
