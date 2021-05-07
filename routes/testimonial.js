@@ -4,6 +4,7 @@ const {
   newTestimonial,
   getTestimonials,
   getTestimonialById,
+  updateTestimonial,
 } = require("../controllers/testimonial");
 const notEmpty = require("../middlewares/notEmpty");
 const validateBody = require("../middlewares/validateBody");
@@ -15,6 +16,8 @@ router.post(
   validateBody,
   newTestimonial
 );
+
+router.put("/testimonials/:id", updateTestimonial);
 
 router.get("/testimonials", getTestimonials);
 

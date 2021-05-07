@@ -43,10 +43,35 @@ const newTestimonial = async (req, res) => {
   }
 };
 
+const updateTestimonial = async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+
+  try {
+    const updateTestimonial = await Testimonial.update(
+      {
+        name: body.name,
+        content: body.content,
+      },
+      { where: { id } }
+    );
+    res.status(200).json(updateTestimonial);
+
+    const updatedTestimonial = await Testimonial.findByPk(id);
+
+    return !updatedTestimonial
+      ? res.status(400).send({ error: "Testimonial does not exist" })
+      : res.json(updatedTestimonial);
+  } catch (error) {
+    res.status(400).json({ status: 400, error: error.message });
+  }
+};
+
 const testimonialController = {
   getTestimonials,
   getTestimonialById,
   newTestimonial,
+  updateTestimonial,
 };
 
 module.exports = testimonialController;
