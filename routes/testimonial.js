@@ -1,19 +1,22 @@
 const router = require("./index");
 const { validationResult } = require("express-validator");
-const { newTestimonial } = require("../controllers/testimonial");
+const {
+  newTestimonial,
+  getTestimonials,
+  getTestimonialById,
+} = require("../controllers/testimonial");
+const notEmpty = require("../middlewares/notEmpty");
+const validateBody = require("../middlewares/validateBody");
 
 router.post(
   "/testimonials",
-  body("name", "Name is mandatory").notEmpty(),
-  body("content", "Content is mandatory").notEmpty(),
-  (req, res) => {
-    const validation = validationResult(req);
-
-    if (!validation.isEmpty()) {
-      res.status(400).json({ validation: validation.array() });
-    }
-    newTestimonial(req, res);
-  }
+  notEmpty("name"),
+  notEmpty("content"),
+  validateBody,
+  newTestimonial
 );
 
+router.get("/testimonials", getTestimonials);
+
+router.get("/testimonials/:id", getTestimonialById);
 module.exports = router;
