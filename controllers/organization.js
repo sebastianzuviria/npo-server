@@ -5,6 +5,10 @@ const getOrganization = async (req, res) => {
     try{
         const organization = await Organization.findOne({
             attributes: ["name", "image", "phone", "address","welcomeText"],
+            include: {
+                association: "Social media",
+                attributes: ["facebook","instagram","linkedin"]
+            },
             where: {
                 id: req.params.id,
             },
