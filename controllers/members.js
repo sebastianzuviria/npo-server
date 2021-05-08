@@ -1,4 +1,4 @@
-//const { Members } = require('../models/index')
+const { Members } = require('../models/index');
 
 module.exports = {
 
@@ -15,9 +15,9 @@ module.exports = {
             if(!hasCorrectFormat.test(name)) throw new Error('Invalid format');
             if(!isImage.test(image)) throw new Error('The image field must be an image');
             
-            //const response = await Members.create({name , image}); 
+            const response = await Members.create({name , image}); 
 
-            res.status(201).json({name, image});
+            res.status(201).json(response);
 
         }catch(error){
 
