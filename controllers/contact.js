@@ -1,4 +1,5 @@
 const { Contact } = require('../models/index');
+const { sendEmailContactThanks } = require('../services/email/email.ready');
 
 const newContact = async (req, res) => {
   try {
@@ -7,6 +8,8 @@ const newContact = async (req, res) => {
 
     if (!contact) res.status(400).json({ ok: false });
 
+    await sendEmailContactThanks({...body})
+    
     res.status(201).json({ ok: true, msg: 'Contact created' });
   } catch (err) {
     res.status(500).json({ ok: false, err });
