@@ -4,15 +4,21 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 module.exports= {
-    send: msg => {
 
-        sgMail.send(msg)
-        
-        .then(response => {
+    send: async msg => {
+
+        try{
+
+            const response = await sgMail.send(msg);
+
+            if(response[0].statusCode === 202) return {status: response[0].statusCode , message: 'Email sent successfully'};
             
-            if(response[0].statusCode === 202) console.log('Email sent successfully');
+        }catch(error){
             
-        })
-        .catch(error => console.log(error.response.body.errors[0].message))
+            return {status: 400, error: error.message}
+
+        }
+
     }
+
 }
