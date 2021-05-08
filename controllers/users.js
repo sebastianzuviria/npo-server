@@ -2,7 +2,7 @@
 
 const { User } = require("../models/index");
 const bcrypt = require("bcrypt");
-
+const { signToken } = require("../utils/jsonwebtoken");
 
 const infoUser = async (req, res) => {
 
@@ -27,6 +27,8 @@ const infoUser = async (req, res) => {
 
 const registerUser = async (req, res ) => {
 
+    const { email, firstName, lastName } = req.body;
+
     const userExists = await User.findOne({ where: { email: req.body.email } });
 
     try {
@@ -35,15 +37,16 @@ const registerUser = async (req, res ) => {
 
             bcrypt.hash( req.body.password, 10, async ( err, hashedPassword ) => {
 
-                await User.create({
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
+                const newUser = await User.create({
+                    firstName,
+                    lastName,
+                    email,
                     password: hashedPassword,
                 });
-
-                res.status(201).json( { message: "User registered successfuly"} );
-
+    
+                const { password, ...dataForToken } = newUser.dataValues;
+    
+                signToken(dataForToken, res);
 
             } );
 
@@ -51,7 +54,7 @@ const registerUser = async (req, res ) => {
 
             res.status(409).json({
 
-                message: "User already registered",
+                message: "User already registered"
 
             });
         }
@@ -60,8 +63,7 @@ const registerUser = async (req, res ) => {
         
         res.status(500).json({
 
-            message: "Could not register user",
-            error: error.message,
+            message: "Could not register user"
             
         });
 
