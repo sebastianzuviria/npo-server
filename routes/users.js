@@ -14,7 +14,7 @@ const { User } = require('../models/index');
 const { deleteUser} = require('../controllers/user');
 
 /* GET users listing. */
-router.get('/',  getUsers);
+router.get('/', verifyAdmin,  getUsers);
 
 router.get('/:id',  getUser);
 
