@@ -2,7 +2,7 @@ const { sendMail } = require('./email.methods');
 const { templatethanksContact } = require('./email.templates');
 
 module.exports = {
-
+    
     sendEmailContactThanks: async contact => {
         const { name, email, phone, message } = contact;
         
@@ -13,10 +13,8 @@ module.exports = {
             html: templatethanksContact(name, email)
         }
 
+        return await sendMail(emailPreparation);
         
-        const data = await sendMail(emailPreparation);
-        console.log(data)
-
     }
 
 }
