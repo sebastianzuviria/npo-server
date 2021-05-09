@@ -30,7 +30,8 @@ module.exports = {
         const body = req.body;
 
         try {
-            let existingCategory = await Category.findOne({ where: {name: body.name} });
+            // Verificar si la nueva categoria ya existe
+            let existingCategory = await Category.findOne({ where: { name: body.name } });
 
             if (!existingCategory) {
                 let newCategory = await Category.create({
