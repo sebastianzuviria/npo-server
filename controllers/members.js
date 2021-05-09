@@ -11,7 +11,7 @@ const deleteMember = async (req, res) => {
             });
             res.status(204).json({ message: 'Member deleted' });
         } else {
-            res.status(400).json({ error: 'Member not exist' });
+            res.status(400).json({ error: 'Member not found' });
         }
     } catch (err) {
         res.status(500).json({ err: err.message });
