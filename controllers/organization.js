@@ -6,13 +6,13 @@ const getOrganization = async (req, res) => {
         const organization = await Organization.findOne({
             attributes: ["name", "image", "phone", "address","welcomeText"],
             include: {
-                association: "Social media",
+                association: "socialmedia",
                 attributes: ["facebook","instagram","linkedin"]
             },
-            where: {
-                id: req.params.id,
-            },
+
         });
+
+        
         if(!organization){
             return res.status(404).json( { message: 'Organization not Found' } );
         }
