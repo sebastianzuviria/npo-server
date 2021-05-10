@@ -24,6 +24,24 @@ module.exports = {
 
         }
 
+    },
+
+    getUser: async (req,res)=>{
+        try {
+
+            const user = await User.findOne({where:{id:req.params.id}})
+            if(!user){
+                return res.status(404).json({ msg: 'User not Found'});
+            }
+            else{
+                return res.status(200).json(user);
+            }
+
+        } catch (error) {
+
+            res.status(400).json({status: 400, error: error.message})
+
+        }
     }
 
 }
