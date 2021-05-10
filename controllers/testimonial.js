@@ -1,9 +1,9 @@
-const { Testimonial } = require("../models/index");
+const { Testimonial } = require('../models/index');
 
 const getTestimonials = async (req, res) => {
   try {
     const testimonials = await Testimonial.findAll({
-      attributes: ["name", "content", "id"],
+      attributes: ['name', 'content', 'id'],
     });
     res.status(200).json(testimonials);
   } catch (error) {
@@ -15,14 +15,14 @@ const getTestimonialById = async (req, res) => {
   const id = req.params.id;
   try {
     testimonial = await Testimonial.findByPk(id, {
-      attributes: ["id", "name", "content"],
+      attributes: ['id', 'name', 'content'],
     });
     if (testimonial) {
       res.status(200).json(testimonial);
     } else {
       res
         .status(400)
-        .json({ error: "it looks like what you are looking for is not here" });
+        .json({ error: 'It looks like what you are looking for is not here' });
     }
   } catch {
     res.status(400).json({ error: error.message });
@@ -53,20 +53,22 @@ const updateTestimonial = async (req, res) => {
         name: body.name,
         content: body.content,
       },
-      { where: { id } }
+      { where: { id: id } }
     );
-    res.status(200).json(updateTestimonial);
-
-    const updatedTestimonial = await Testimonial.findByPk(id);
-
-    return !updatedTestimonial
-      ? res.status(400).send({ error: "Testimonial does not exist" })
-      : res.json(updatedTestimonial);
+    if (updateTestimonial[0] === 1) {
+      const updatedTestimonial = await Testimonial.findByPk(id);
+      res.status(200).json(updatedTestimonial);
+    } else {
+      res
+        .status(400)
+        .json({ error: 'it looks like what you are looking for is not here' });
+    }
   } catch (error) {
     res.status(400).json({ status: 400, error: error.message });
   }
 };
 
+//exports
 const testimonialController = {
   getTestimonials,
   getTestimonialById,

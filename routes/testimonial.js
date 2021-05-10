@@ -1,25 +1,31 @@
-const router = require("./index");
-const { validationResult } = require("express-validator");
+const router = require('./index');
 const {
   newTestimonial,
   getTestimonials,
   getTestimonialById,
   updateTestimonial,
-} = require("../controllers/testimonial");
-const notEmpty = require("../middlewares/notEmpty");
-const validateBody = require("../middlewares/validateBody");
+  deleteTestimonial,
+} = require('../controllers/testimonial');
+const notEmpty = require('../middlewares/notEmpty');
+const validateBody = require('../middlewares/validateBody');
 
 router.post(
-  "/testimonials",
-  notEmpty("name"),
-  notEmpty("content"),
+  '/testimonials',
+  notEmpty('name'),
+  notEmpty('content'),
   validateBody,
   newTestimonial
 );
 
-router.put("/testimonials/:id", updateTestimonial);
+router.put(
+  '/testimonials/:id',
+  notEmpty('name'),
+  notEmpty('content'),
+  validateBody,
+  updateTestimonial
+);
 
-router.get("/testimonials", getTestimonials);
+router.get('/testimonials', getTestimonials);
 
-router.get("/testimonials/:id", getTestimonialById);
+router.get('/testimonials/:id', getTestimonialById);
 module.exports = router;
