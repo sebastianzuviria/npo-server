@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Socialmediacontact extends Model {
 
     static associate(models) {
-      Socialmediacontact.belongsTo(models.Organization, {as: 'organizationcontact', foreignKey:"organizationId"});
+      Socialmediacontact.belongsTo(models.Organization, {as: 'organization', foreignKey:"organizationId"});
 
     }
   };
