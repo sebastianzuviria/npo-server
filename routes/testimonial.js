@@ -25,6 +25,8 @@ router.put(
   updateTestimonial
 );
 
+router.delete('/testimonials/:id', deleteTestimonial);
+
 router.get('/testimonials', getTestimonials);
 
 router.get('/testimonials/:id', getTestimonialById);

@@ -68,12 +68,33 @@ const updateTestimonial = async (req, res) => {
   }
 };
 
+const deleteTestimonial = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const testimonialToDelete = await Testimonial.findByPk(id);
+    if (testimonialToDelete) {
+      await Testimonial.destroy({
+        where: { id: id },
+      });
+      res.status(200).json({ message: 'Testimonial deleted' });
+    } else {
+      res
+        .status(400)
+        .json({ error: 'it looks like what you are looking for is not here' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 //exports
 const testimonialController = {
   getTestimonials,
   getTestimonialById,
   newTestimonial,
   updateTestimonial,
+  deleteTestimonial,
 };
 
 module.exports = testimonialController;
