@@ -22,22 +22,53 @@ module.exports = {
 
     },
 
+    createMembers: async (req, res) => {
+        const {name, image} = req.body;
+        try{
+
+            if(!name) throw new Error('The name field is required');
+
+            const hasCorrectFormat = /^([a-z]+[ ]?[a-z]+)+$/i;
+
+            const isImage = /(.jpg|.jpeg|.png|.gif)$/i;
+            
+            if(!hasCorrectFormat.test(name)) throw new Error('Invalid format');
+            if(!isImage.test(image)) throw new Error('The image field must be an image');
+            
+            const response = await Members.create({name , image}); 
+
+            res.status(201).json(response);
+
+        }catch(error){
+
+            res.status(400).json({status: 400, message: error.message})
+
+        }
+        
+    },
+
     deleteMember: async (req, res) => {
         const id = req.params.id;
     
         try {
-            const memberDelete = await Members.findByPk(id);
-            if(memberDelete) {
-                await Members.destroy({
-                    where: { id: id }
-                });
-                res.status(204).json({ message: 'Member deleted' });
-            } else {
-                res.status(400).json({ error: 'Member not found' });
-            }
+            
+            const response = await Members.destroy({
+                 where: { id: id }
+            })
+            
+            if(response !== 1) return res.status(400).json({ error: 'Member not found' });
+
+            res.status(200).json({ message: 'Member deleted' });
+
+        
         } catch (err) {
             res.status(500).json({ err: err.message });
         };
     }
 
 }
+    
+
+    
+
+
