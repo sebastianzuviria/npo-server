@@ -5,10 +5,14 @@ const getOrganization = async (req, res) => {
     try{
         const organization = await Organization.findOne({
             attributes: ["name", "image", "phone", "address","welcomeText"],
-            where: {
-                id: req.params.id,
+            include: {
+                association: "socialmedia",
+                attributes: ["facebook","instagram","linkedin"]
             },
+
         });
+
+        
         if(!organization){
             return res.status(404).json( { message: 'Organization not Found' } );
         }
