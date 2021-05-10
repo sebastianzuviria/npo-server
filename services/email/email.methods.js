@@ -4,7 +4,9 @@ const { send } = require('./email.config');
 
 module.exports = {
 
-    sendMail: ({to='' , subject='', text='', html=''}) => {
+    sendMail: async paramsMail => {
+
+        const {to, subject, text, html} = paramsMail;
 
         const msg = {
             to,
@@ -14,7 +16,7 @@ module.exports = {
             html
         }
         
-        send(msg)
+        return await send(msg)
         
     }
 
