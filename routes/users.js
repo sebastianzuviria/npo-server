@@ -1,28 +1,27 @@
-var express = require('express');
-var router = express.Router();
-
-// model
-const { User } = require('../models/index');
+const express = require('express');
+const router = express.Router();
 
 // middlewares
 const { verifyAdmin } = require('../middlewares/verifyRoles');
 const validateBody = require('../middlewares/validateBody');
 
 // utils
-const bcrypt = require('bcrypt');
 const { body } = require('express-validator');
 
 // controllers
-const { deleteUser, infoUser, getUsers, registerUser } = require('../controllers/users');
+const {
+  deleteUser,
+  infoUser,
+  getUsers,
+  registerUser
+} = require('../controllers/users');
 
 /* GET users listing. */
 router.get('/', verifyAdmin, getUsers);
+router.get('/:id', infoUser);
 
 /* DELETE (soft or logical) from DB */
 router.delete('/:id', deleteUser);
-
-//Get the information of the authenticated user
-router.get('/auth/me/:id', infoUser);
 
 /* POST a new user (register) */
 router.post(

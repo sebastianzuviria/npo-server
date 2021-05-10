@@ -1,5 +1,5 @@
 const router = require('./index');
-const { postActivity, updateActivity } = require('../controllers/activities');
+const { postActivity, updateActivity, listActivity, oneActivity } = require('../controllers/activities');
 const validateBody = require('../middlewares/validateBody');
 const notEmpty = require('../middlewares/notEmpty');
 
@@ -16,5 +16,10 @@ router.put('/activities/:id',
     validateBody,
     updateActivity
 );
+
+router.get('/activities', listActivity)
+
+router.get('/activities/:id', oneActivity)
+
 
 module.exports = router;
