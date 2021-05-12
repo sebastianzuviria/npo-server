@@ -164,18 +164,85 @@ test('delete a novelty successfully', async () => {
     expect(noveltiesAfterDelete).toHaveLength(initialNovelties.length - 1)   
 })
 
-test('when a delete with an invalid id is made return a message', async () => {
+test('when delete with an invalid id is made return a message', async () => {
     const returnedNovelties = await Novelty.findAll({ where: {} })
     const expected = { error: 'New not exist' }
 
     const response = await api
         .delete(`/news/${returnedNovelties[2].dataValues.id + 1}`)
         .expect(400)
+        .expect('Content-Type', /application\/json/)
     
     expect(response.body).toMatchObject(expected)
     const novelties = await Novelty.findAll({ where: {} })
     const noveltiesAfterDelete = novelties.map(n => n.toJSON())
     expect(noveltiesAfterDelete).toHaveLength(initialNovelties.length)   
+})
+
+test('update a novelty successfully', async () => {
+    const updatedNovelty = {
+        title: 'News edited',
+        image: 'image4.jpg',
+        content: `<p>Lorem dolor sit amet, consectetur adipiscing elit. Pellentesque vel mi ut
+        velit tempor aliquam eget eget enim. Proin cursus eleifend pretium. Aliquam cursus 
+        pellentesque interdum. Vivamus placerat id leo a pellentesque. Vivamus a congue urna,
+        sed porta eros. Etiam finibus magna et est aliquam, sed semper libero facilisis. 
+        Donec lectus lorem, rhoncus vitae quam eget, vulputate gravida elit. Praesent ultricies
+        eros id velit condimentum, eu ultrices nisl consequat.</p>`,
+        category: 'category 1',
+    }
+    
+    const returnedNovelties = await Novelty.findAll({ where: {} })
+
+    const response = await api
+        .put(`/news/${returnedNovelties[0].dataValues.id}`)
+        .send(updatedNovelty)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    
+    expect(response.body.title).toMatch(updatedNovelty.title)
+    expect(response.body.image).toMatch(updatedNovelty.image)
+    expect(response.body.content).toMatch(updatedNovelty.content)
+    expect(response.body.type).toMatch('news')
+})
+
+test('try update a novelty with an invalid id return a message error', async () => {
+    const updatedNovelty = {
+        title: 'News edited',
+        image: 'image4.jpg',
+        content: `<p>Lorem dolor sit amet, consectetur adipiscing elit. Pellentesque vel mi ut
+        velit tempor aliquam eget eget enim. Proin cursus eleifend pretium. Aliquam cursus 
+        pellentesque interdum. Vivamus placerat id leo a pellentesque. Vivamus a congue urna,
+        sed porta eros. Etiam finibus magna et est aliquam, sed semper libero facilisis. 
+        Donec lectus lorem, rhoncus vitae quam eget, vulputate gravida elit. Praesent ultricies
+        eros id velit condimentum, eu ultrices nisl consequat.</p>`,
+        category: 'category 1',
+    }
+    const expected = { error: 'New not exist'}
+    
+    const returnedNovelties = await Novelty.findAll({ where: {} })
+
+    const response = await api
+        .put(`/news/${returnedNovelties[2].dataValues.id + 1}`)
+        .send(updatedNovelty)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+    
+    expect(response.body).toMatchObject(expected)
+})
+
+test('title, image, content, category must exist to updated a Novelty', async () => {
+    const returnedNovelties = await Novelty.findAll({ where: {} })
+    const newNovelty = {}
+
+    const response = await api
+        .put(`/news/${returnedNovelties[0].dataValues.id}`)
+        .send(newNovelty)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveProperty('validationErrors')
+    expect(response.body.validationErrors).toHaveLength(8)    
 })
 
 afterAll(() => {
