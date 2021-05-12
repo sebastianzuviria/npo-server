@@ -68,18 +68,47 @@ test('novelties are returned as json', async () => {
         .expect('Content-Type', /application\/json/)
 })
 
-test('all news are returned', async () => {
-    const response = await api.get('/news')
-
-    expect(response.body).toHaveLength(initialNovelties.length)
-})
-
 test('id is defined', async () => {
     const response = await api.get('/news')
 
     const ids = response.body.map(n => n.id)
     expect(ids).toBeDefined()
 })
+
+test('all news are returned', async () => {
+    const response = await api.get('/news')
+
+    expect(response.body).toHaveLength(initialNovelties.length)
+})
+
+test('novelties are returned by id', async () => {
+    const returnedNovelties = await Novelty.findAll({ where: {}})
+    await api
+        .get(`/news/${returnedNovelties[0].dataValues.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    await api
+        .get(`/news/${returnedNovelties[1].dataValues.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    await api
+        .get(`/news/${returnedNovelties[2].dataValues.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+})
+
+test('if id not exist, return a status code 400 with message', async () => {
+    const returnedNovelties = await Novelty.findAll({ where: {}})
+    const expected = { error: 'new not exist' }
+    const response = await api
+        .get(`/news/${returnedNovelties[2].dataValues.id + 1}`)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+    
+    expect(response.body).toHaveProperty('error')
+    expect(response.body).toMatchObject(expected)   
+})
+
 
 test('a valid novelty can be added and type: news is added', async () => {
     const newNovelty = {

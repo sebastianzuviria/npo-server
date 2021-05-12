@@ -35,7 +35,7 @@ const getNoveltyById = async (request, response) => {
             attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
         });
         if (noveltyReturned){ 
-            response.json(noveltyReturned);
+            response.status(200).json(noveltyReturned);
         } else {
             response.status(400).json({ error: 'new not exist' });
         }
