@@ -81,7 +81,7 @@ test('id is defined', async () => {
     expect(ids).toBeDefined()
 })
 
-test('a valid novelty can be added and type: news is added ', async () => {
+test('a valid novelty can be added and type: news is added', async () => {
     const newNovelty = {
         title: 'News 4',
         image: 'image4.jpg',
@@ -104,6 +104,23 @@ test('a valid novelty can be added and type: news is added ', async () => {
     const noveltiesAtEnd = novelties.map(n => n.toJSON())
 
     expect(noveltiesAtEnd).toHaveLength(initialNovelties.length + 1)
+})
+
+test('title, image, content, category must exist to POST', async () => {
+    const newNovelty = {}
+
+    const response = await api
+        .post('/news')
+        .send(newNovelty)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveProperty('validationErrors')
+    expect(response.body.validationErrors).toHaveLength(8)    
+    const novelties = await Novelty.findAll({ where: { type: 'news' }})
+    const noveltiesAtEnd = novelties.map(n => n.toJSON())
+
+    expect(noveltiesAtEnd).toHaveLength(initialNovelties.length)
 })
 
 afterAll(() => {
