@@ -253,9 +253,9 @@ describe('NOVELTY ENDPOINT TEST', () => {
             expect(response.body).toHaveProperty('validationErrors')
             expect(response.body.validationErrors).toHaveLength(8)    
         })
-
-        afterAll(() => {
-            db.sequelize.close()
-        })
     })
+})
+
+afterAll(() => {
+    db.sequelize.close()
 })
