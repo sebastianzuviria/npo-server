@@ -98,7 +98,7 @@ test('novelties are returned by id', async () => {
 })
 
 test('if id not exist, return a status code 400 with message', async () => {
-    const returnedNovelties = await Novelty.findAll({ where: {}})
+    const returnedNovelties = await Novelty.findAll({ where: {} })
     const expected = { error: 'new not exist' }
     const response = await api
         .get(`/news/${returnedNovelties[2].dataValues.id + 1}`)
@@ -150,6 +150,32 @@ test('title, image, content, category must exist to POST', async () => {
     const noveltiesAtEnd = novelties.map(n => n.toJSON())
 
     expect(noveltiesAtEnd).toHaveLength(initialNovelties.length)
+})
+
+test('delete a novelty successfully', async () => {
+    const returnedNovelties = await Novelty.findAll({ where: {} })
+
+    await api
+        .delete(`/news/${returnedNovelties[0].dataValues.id}`)
+        .expect(204)
+    
+    const novelties = await Novelty.findAll({ where: {} })
+    const noveltiesAfterDelete = novelties.map(n => n.toJSON())
+    expect(noveltiesAfterDelete).toHaveLength(initialNovelties.length - 1)   
+})
+
+test('when a delete with an invalid id is made return a message', async () => {
+    const returnedNovelties = await Novelty.findAll({ where: {} })
+    const expected = { error: 'New not exist' }
+
+    const response = await api
+        .delete(`/news/${returnedNovelties[2].dataValues.id + 1}`)
+        .expect(400)
+    
+    expect(response.body).toMatchObject(expected)
+    const novelties = await Novelty.findAll({ where: {} })
+    const noveltiesAfterDelete = novelties.map(n => n.toJSON())
+    expect(noveltiesAfterDelete).toHaveLength(initialNovelties.length)   
 })
 
 afterAll(() => {

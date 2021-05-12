@@ -55,7 +55,7 @@ const deleteNovelty = async (request, response) => {
                     id: id
                 }
             });
-            response.status(204).json({ message: 'New deleted' });
+            response.status(204).end();
         } else {
             response.status(400).json({ error: 'New not exist' });
         }
