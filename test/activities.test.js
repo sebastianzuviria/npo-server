@@ -58,6 +58,16 @@ describe('Activities endpoint tests', () => {
         expect(res.body).toHaveLength(initialActivity.length);
 
     });
+
+    it("Get activities by id", async () => {
+
+        initialActivity.map( async (data) => {
+
+            const res = await apiTest.get(`/activities/${ data.id }`);
+            expect(() => res.body.id === initialActivity[0].id);
+        })
+
+    });
     
 });
 
