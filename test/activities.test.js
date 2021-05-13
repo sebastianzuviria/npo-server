@@ -63,8 +63,9 @@ describe('Activities endpoint tests', () => {
 
         initialActivity.map( async (data) => {
 
-            const res = await apiTest.get(`/activities/${ data.id }`);
-            expect(() => res.body.id === initialActivity[0].id);
+            await apiTest.get(`/activities/${ data.id }`)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
         })
 
     });
