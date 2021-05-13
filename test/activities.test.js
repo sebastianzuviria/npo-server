@@ -5,7 +5,6 @@ const supertest = require('supertest');
 const app = require('../app');
 const apiTest = supertest(app);
 
-
 // Set initial activities
 const initialActivity = [
     {
@@ -33,17 +32,17 @@ beforeAll( async () => {
     
         initialActivity.map( async (data) => {
         await Activity.create(data);
-    });
+        });
         
     } catch (err) {
-        res.status(400).send(err.message);
+        console.log( err );
     }
     
 });
 
 describe('Activities endpoint tests', () => {
 
-    it("Get /activities as JSON", async () => {
+    it("(GET) as JSON", async () => {
 
         await apiTest
             .get('/activities')
@@ -52,24 +51,107 @@ describe('Activities endpoint tests', () => {
 
     });
 
-    it("Get all /activities", async () => {
+    it("(GET) all", async () => {
 
         const res = await apiTest.get('/activities');
         expect(res.body).toHaveLength(initialActivity.length);
 
     });
 
-    it("Get activities by id", async () => {
+    it("(GET) by id", async () => {
 
-        initialActivity.map( async (data) => {
+        const res = await Activity.findAll({ where: {}});
+
+        res.map( async (data) => {
 
             await apiTest.get(`/activities/${ data.id }`)
                 .expect(200)
-                .expect('Content-Type', /application\/json/)
+                .expect('Content-Type', /json/)
         })
 
     });
-    
+
+    it("(GET) must fail if ID not exists", async () => {
+
+        const res = await Activity.findAll({where: {}});
+
+            await apiTest.get(`/activities/${ res[ res.length -1 ].dataValues.id + 1 }`)
+                .expect(400)
+                .expect('Content-Type', /json/)
+
+    });
+
+    it('(POST) new activity', async () => {
+
+        const { content, image } = initialActivity[0];
+
+        await apiTest
+          .post('/activities')
+          .send({ content, image, name: "Activity n4" })
+          .expect(200)
+      });
+
+      it('(POST) must fail if a field is empty', async () => {
+
+        const { content, image } = initialActivity[0];
+
+        await apiTest
+          .post('/activities')
+          .send({ content, image })
+          .expect(400)
+      });
+
+      it('(PUT) /activities', async () => {
+
+        const res = await Activity.findAll({limit: 1, where: {}});
+
+        await apiTest
+          .put(`/activities/${ res[0].dataValues.id }`)
+          .send({ content: "Content Content", name: "Edited Activity" })
+          .expect(200)
+
+      });
+
+      it('(PUT) must fail if id not exists', async () => {
+
+        await apiTest
+          .put('/activities/-9')
+          .send({ content: "Content Content", name: "Edited Activity" })
+          .expect(400)
+
+      });
+
+      it('(PUT) must fail if a field is empty', async () => {
+
+        const res = await Activity.findAll({limit: 1, where: {}});
+
+        await apiTest
+          .put(`/activities/${ res[0].dataValues.id }`)
+          .send({ content: "", name: "" })
+          .expect(400)
+
+      });
+
+    //   it('(DELETE) by ID', async () => {
+
+    //     const res = await Activity.findAll({where: {}});
+
+    //     await apiTest
+    //       .delete(`/activities/${ res[0].dataValues.id }`)
+    //       .expect(200)
+
+    //   });
+
+    //   it('(DELETE) must fail if id not exists', async () => {
+
+    //    const res = await Activity.findAll({where: {}});
+
+    //     await apiTest
+    //       .delete(`/activities/${ res[ res.length -1 ].dataValues.id + 1 }`)
+    //       .expect(400)
+
+    //   });
+
 });
 
 // Close sequelize connection after run all tests
