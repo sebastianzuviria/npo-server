@@ -114,8 +114,10 @@ describe('Activities endpoint tests', () => {
 
       it('(PUT) must fail if id not exists', async () => {
 
+        const res = await Activity.findAll({where: {}});
+
         await apiTest
-          .put('/activities/-9')
+           .put(`/activities/${ res[ res.length -1 ].dataValues.id + 1 }`)
           .send({ content: "Content Content", name: "Edited Activity" })
           .expect(400)
 
