@@ -62,7 +62,7 @@ beforeEach(async () => {
 })
 
 describe('NOVELTY ENDPOINT TEST', () => {
-    describe('general tests', () => {
+    describe('when there is initially some notes saved', () => {
         test('novelties are returned as json', async () => {
             await api
                 .get('/news')
@@ -106,7 +106,7 @@ describe('NOVELTY ENDPOINT TEST', () => {
             const expected = { error: 'new not exist' }
             const response = await api
                 .get(`/news/${returnedNovelties[2].dataValues.id + 1}`)
-                .expect(400)
+                .expect(404)
                 .expect('Content-Type', /application\/json/)
             
             expect(response.body).toHaveProperty('error')
@@ -177,7 +177,7 @@ describe('NOVELTY ENDPOINT TEST', () => {
 
             const response = await api
                 .delete(`/news/${returnedNovelties[2].dataValues.id + 1}`)
-                .expect(400)
+                .expect(404)
                 .expect('Content-Type', /application\/json/)
             
             expect(response.body).toMatchObject(expected)
@@ -234,7 +234,7 @@ describe('NOVELTY ENDPOINT TEST', () => {
             const response = await api
                 .put(`/news/${returnedNovelties[2].dataValues.id + 1}`)
                 .send(updatedNovelty)
-                .expect(400)
+                .expect(404)
                 .expect('Content-Type', /application\/json/)
             
             expect(response.body).toMatchObject(expected)
