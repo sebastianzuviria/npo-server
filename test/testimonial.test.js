@@ -35,3 +35,6 @@ const initialTestimonials = [
     }
 ]
 
+beforeAll(async () => {
+    await db.sequelize.sync({ force: false })
+})
