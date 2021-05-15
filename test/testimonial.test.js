@@ -243,13 +243,30 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             const newTestimonial = {}
 
             const response = await api
-                .put(`/news/${returnedTestimonials[0].dataValues.id}`)
+                .put(`/testimonials/${returnedTestimonials[0].dataValues.id}`)
                 .send(newTestimonial)
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            expect(response.body).toHaveProperty('validationErrors')
-            expect(response.body.validationErrors).toHaveLength(8)    
+            expect(response.body).toHaveProperty('errors')
+            expect(response.body.errors).toHaveLength(2)    
+        })
+
+        test('name and content cant be empty to updated a testimonial', async () => {
+            const returnedTestimonials = await Testimonial.findAll({ where: {} })
+            const newTestimonial = {
+                name: '',
+                content: ''
+            }
+
+            const response = await api
+                .put(`/testimonials/${returnedTestimonials[0].dataValues.id}`)
+                .send(newTestimonial)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toHaveProperty('errors')
+            expect(response.body.errors).toHaveLength(2)    
         })
     })
 })
