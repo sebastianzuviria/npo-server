@@ -98,6 +98,31 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             expect(response.body).toMatchObject(expected)   
         })
     })
+
+    describe('POST tests', () => {
+        test('a valid testimonial can be added', async () => {
+            const newTestimonial = {
+                name: 'Testimonial 4',
+                content: `Lorem dolor sit amet, consectetur adipiscing elit. Pellentesque vel mi ut
+                velit tempor aliquam eget eget enim. Proin cursus eleifend pretium. Aliquam cursus 
+                pellentesque interdum. Vivamus placerat id leo a pellentesque. Vivamus a congue urna,
+                sed porta eros. Etiam finibus magna et est aliquam, sed semper libero facilisis. 
+                Donec lectus lorem, rhoncus vitae quam eget, vulputate gravida elit. Praesent ultricies
+                eros id velit condimentum, eu ultrices nisl consequat.`
+            }
+
+            await api
+                .post('/testimonials')
+                .send(newTestimonial)
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
+
+            const testimonials = await Testimonial.findAll({ where: {}})
+            const testimonialsAtEnd = testimonials.map(n => n.toJSON())
+    
+            expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length + 1)    
+        })
+    })
 })
 
 afterAll(() => {
