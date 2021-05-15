@@ -101,7 +101,7 @@ describe('NOVELTY ENDPOINT TEST', () => {
                 .expect('Content-Type', /application\/json/)
         })
 
-        test('if id not exist, return a status code 400 with message', async () => {
+        test('if id not exist, return a status code 404 with message', async () => {
             const returnedNovelties = await Novelty.findAll({ where: {} })
             const expected = { error: 'new not exist' }
             const response = await api
