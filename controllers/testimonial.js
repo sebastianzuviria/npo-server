@@ -21,8 +21,8 @@ const getTestimonialById = async (req, res) => {
       res.status(200).json(testimonial);
     } else {
       res
-        .status(400)
-        .json({ error: 'It looks like what you are looking for is not here' });
+        .status(404)
+        .json({ error: 'testimonial not exist' });
     }
   } catch {
     res.status(400).json({ error: error.message });

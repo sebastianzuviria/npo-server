@@ -88,7 +88,7 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
 
         test('if id not exist, return a status code 404 with message', async () => {
             const returnedTestimonials = await Testimonial.findAll({ where: {} })
-            const expected = { error: 'It looks like what you are looking for is not here' }
+            const expected = { error: 'testimonial not exist' }
             const response = await api
                 .get(`/testimonials/${returnedTestimonials[2].dataValues.id + 1}`)
                 .expect(404)
