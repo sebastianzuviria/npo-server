@@ -162,7 +162,7 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
     })
 
     describe('DELETE tests', () => {
-        test('delete novelty successfully', async () => {
+        test('delete testimonial successfully', async () => {
             const returnedTestimonials = await Testimonial.findAll({ where: {} })
 
             await api
@@ -172,6 +172,22 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             const testimonials = await Testimonial.findAll({ where: {} })
             const testimonialsAfterDelete = testimonials.map(t => t.toJSON())
             expect(testimonialsAfterDelete).toHaveLength(initialTestimonials.length - 1)
+        })
+
+        test('when delete with an invalid id is made, return a 404 with error nessage', async () => {
+            const returnedTestimonials = await Testimonial.findAll({ where: {} })
+            const expected = { error: 'Testimonial not exist' }
+
+            const response = await api
+            .delete(`/testimonials/${returnedTestimonials[2].dataValues.id + 1}`)
+            .expect(404)
+            .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toMatchObject(expected)
+            const testimonials = await Testimonial.findAll({ where: {} })
+            const testimonialsAfterDelete = testimonials.map(t => t.toJSON())
+            expect(testimonialsAfterDelete).toHaveLength(initialTestimonials.length)
+
         })
     })
 })
