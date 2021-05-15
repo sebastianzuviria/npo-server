@@ -27,7 +27,7 @@ testimonialRouter.put(
 
 testimonialRouter.delete('/:id', deleteTestimonial);
 
-testimonialRouter.get('', getTestimonials);
+testimonialRouter.get('/', getTestimonials);
 
 testimonialRouter.get('/:id', getTestimonialById);
 
