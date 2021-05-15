@@ -156,6 +156,28 @@ describe('NOVELTY ENDPOINT TEST', () => {
 
             expect(noveltiesAtEnd).toHaveLength(initialNovelties.length)
         })
+
+        test('title, image, content, category cant be empty to POST', async () => {
+            const newNovelty = {
+                title: '',
+                image: '',
+                content: '',
+                category: ''
+            }
+
+            const response = await api
+                .post('/news')
+                .send(newNovelty)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toHaveProperty('validationErrors')
+            expect(response.body.validationErrors).toHaveLength(4)    
+            const novelties = await Novelty.findAll({ where: { type: 'news' }})
+            const noveltiesAtEnd = novelties.map(n => n.toJSON())
+
+            expect(noveltiesAtEnd).toHaveLength(initialNovelties.length)
+        })
     })
 
     describe('DELETE tests', () => {
