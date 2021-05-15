@@ -3,7 +3,6 @@
 const db = require('../models/index');
 const { User } = require('../models/index');
 const bcrypt = require('bcrypt');
-const { signToken } = require('../utils/jsonwebtoken');
 
 const supertest = require('supertest');
 const app = require('../app');
@@ -19,28 +18,24 @@ const testUser = {
 }
 
 // Clean DB and add testUser before run all tests
-beforeAll( async ( res) => {
+beforeAll( async () => {
 
     try {
 
-        bcrypt.hash(testUser.password, 10, async (err, hashedPassword) => {
+        await bcrypt.hash(testUser.password, 10, async (err, hashedPassword) => {
 
             const { firstName, lastName, email, image, roleId } = testUser;
 
-            const newUser = await User.create({
-              firstName,
-              image,
-              lastName,
-              email,
-              password: hashedPassword,
-              roleId
+            await User.create({
+                firstName,
+                image,
+                lastName,
+                email,
+                password: hashedPassword,
+                roleId
             });
-    
-            const { password, ...dataForToken } = newUser.dataValues;
-    
-            signToken(dataForToken, res);
             
-          });
+        });
 
     } catch (err) {
         console.log(err);
