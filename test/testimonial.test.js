@@ -179,9 +179,9 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             const expected = { error: 'Testimonial not exist' }
 
             const response = await api
-            .delete(`/testimonials/${returnedTestimonials[2].dataValues.id + 1}`)
-            .expect(404)
-            .expect('Content-Type', /application\/json/)
+                .delete(`/testimonials/${returnedTestimonials[2].dataValues.id + 1}`)
+                .expect(404)
+                .expect('Content-Type', /application\/json/)
 
             expect(response.body).toMatchObject(expected)
             const testimonials = await Testimonial.findAll({ where: {} })
@@ -189,6 +189,54 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             expect(testimonialsAfterDelete).toHaveLength(initialTestimonials.length)
 
         })
+    })
+
+    describe('PUT test', () => {
+        test('update a testimonial successfully', async () => {
+            const updatedTestimonial = {
+                name: 'Testimonial edited',
+                content: `Lorem dolor sit amet, consectetur adipiscing elit. Pellentesque vel mi ut
+                velit tempor aliquam eget eget enim. Proin cursus eleifend pretium. Aliquam cursus 
+                pellentesque interdum. Vivamus placerat id leo a pellentesque. Vivamus a congue urna,
+                sed porta eros. Etiam finibus magna et est aliquam, sed semper libero facilisis. 
+                Donec lectus lorem, rhoncus vitae quam eget, vulputate gravida elit. Praesent ultricies
+                eros id velit condimentum, eu ultrices nisl consequat.`
+            }
+            
+            const returnedTestimonials = await Testimonial.findAll({ where: {} })
+
+            const response = await api
+                .put(`/testimonials/${returnedTestimonials[0].dataValues.id}`)
+                .send(updatedTestimonial)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            
+            expect(response.body.name).toMatch(updatedTestimonial.name)
+            expect(response.body.content).toMatch(updatedTestimonial.content)
+        })
+
+        test('try update a testimonial with an invalid id return a message error', async () => {
+            const updatedTestimonial = {
+                name: 'Testimonial edited',
+                content: `Lorem dolor sit amet, consectetur adipiscing elit. Pellentesque vel mi ut
+                velit tempor aliquam eget eget enim. Proin cursus eleifend pretium. Aliquam cursus 
+                pellentesque interdum. Vivamus placerat id leo a pellentesque. Vivamus a congue urna,
+                sed porta eros. Etiam finibus magna et est aliquam, sed semper libero facilisis. 
+                Donec lectus lorem, rhoncus vitae quam eget, vulputate gravida elit. Praesent ultricies
+                eros id velit condimentum, eu ultrices nisl consequat.`
+            }
+            const expected = { error: 'Testimonial not exist'}
+
+            const returnedTestimonials = await Testimonial.findAll({ where: {} })
+
+            const response = await api
+                .put(`/testimonials/${returnedTestimonials[2].dataValues.id + 1}`)
+                .send(updatedTestimonial)
+                .expect(404)
+                .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toMatchObject(expected)
+        })   
     })
 })
 
