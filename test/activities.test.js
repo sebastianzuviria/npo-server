@@ -72,10 +72,14 @@ describe('Activities endpoint tests', () => {
 
         const res = await Activity.findAll({ where: {} });
 
-        await apiTest
+        const response = await apiTest
             .get(`/activities/${res[res.length - 1].dataValues.id + 1}`)
-            .expect(400)
+            .expect(404)
             .expect('Content-Type', /json/);
+
+        const { error } = JSON.parse(response.text);
+        expect(error).toBe('Activity not Found');
+
     });
 
     test('(POST) new activity', async () => {
@@ -86,13 +90,21 @@ describe('Activities endpoint tests', () => {
             .post('/activities')
             .send({ content, image, userId, name: 'Activity n4' })
             .expect(200);
+
     });
 
     test('(POST) must fail if a field is empty', async () => {
 
         const { content, image } = initialActivity[0];
 
-        await apiTest.post('/activities').send({ content, image }).expect(400);
+        const response = await apiTest.post('/activities')
+            .send({ content, image })
+            .expect(400);
+
+        const { errors } = JSON.parse(response.text);
+        expect(errors[0].msg).toBe('name is mandatory.');
+        expect(errors[1].msg).toBe('userId is mandatory.');
+
     });
 
     test('(PUT) /activities', async () => {
@@ -109,20 +121,26 @@ describe('Activities endpoint tests', () => {
 
         const res = await Activity.findAll({ where: {} });
 
-        await apiTest
+        const response = await apiTest
             .put(`/activities/${res[res.length - 1].dataValues.id + 1}`)
-            .send({ content: 'Content Content', name: 'Edited Activity' })
+            .send({ content: 'Content Content', name: 'Edited Activity', userId: 1 })
             .expect(400);
+
+        const { error } = JSON.parse(response.text);
+        expect(error).toBe('Activity not Found');
     });
 
     test('(PUT) must fail if a field is empty', async () => {
 
         const res = await Activity.findAll({ limit: 1, where: {} });
 
-        await apiTest
+        const response = await apiTest
             .put(`/activities/${res[0].dataValues.id}`)
-            .send({ content: '', name: '' })
+            .send({ content: 'Some Content', name: '', userId: 1 })
             .expect(400);
+
+        const { errors } = JSON.parse(response.text);
+        expect(errors[0].msg).toBe('name is mandatory.');
     });
 
     test("(DELETE) by ID", async () => {
@@ -131,16 +149,19 @@ describe('Activities endpoint tests', () => {
 
         await apiTest
             .delete(`/activities/${res[0].dataValues.id}`)
-                .expect(200);
+            .expect(200);
     });
 
     test('(DELETE) must fail if ID doesn\'t exists', async () => {
 
         const res = await Activity.findAll({where: {}, order: [ [ 'id', 'DESC' ]]});
 
-        await apiTest
+        const response = await apiTest
             .delete(`/activities/${ res[0].dataValues.id + 1 }`)
-            .expect(400)
+            .expect(400);
+
+        const { error } = JSON.parse(response.text);
+        expect(error).toBe('Activity not Found');
 
     });
 });

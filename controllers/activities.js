@@ -16,11 +16,11 @@ module.exports = {
                 name,
                 userId
             });
-            return res.status(200).json( { message: 'Activity posted successfully' } ); // Improve response? 
+            return res.status(200).json( { msg: 'Activity posted successfully' } ); // Improve response? 
 
         } catch (error) {
 
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
 
         } 
     },
@@ -42,11 +42,11 @@ module.exports = {
             // Get the updated activity
             const updatedActivity = await Activity.findByPk( id );
 
-            return ( !updatedActivity ) ? res.status(400).send( { error: 'Activity does not exist' } ) : res.status(200).json( updatedActivity );
+            return ( !updatedActivity ) ? res.status(400).json( { error: 'Activity not Found' } ) : res.status(200).json( updatedActivity );
 
         } catch (error) {
 
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
 
         } 
     },
@@ -59,7 +59,7 @@ module.exports = {
             
         }catch(error){
             
-            res.status(400).json({status: 400, error: error.message})
+            res.status(400).json({error: error.message})
 
         }
     },
@@ -71,8 +71,8 @@ module.exports = {
             const activity = await Activity.findByPk(id);
             
 
-            if(activity.length === 0){
-                return res.status(404).json({ msg: 'Activity not Found'});
+            if(!activity){
+                return res.status(404).json({ error: 'Activity not Found'});
             }
             else {
                 return res.status(200).json(activity);
@@ -94,8 +94,8 @@ module.exports = {
             const deletedActivity = await Activity.destroy({ where: { id } });
             
             return ( deletedActivity ) 
-                ? res.status(200).json({ message: 'Activity deleted successfuly' }) 
-                : res.status(400).send({ error: 'ID not found' });
+                ? res.status(200).json({ msg: 'Activity deleted successfuly' }) 
+                : res.status(400).json({ error: 'Activity not Found' });
 
         } catch (error) {
 
