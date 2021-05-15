@@ -122,6 +122,43 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
     
             expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length + 1)    
         })
+
+        test('name and content must exist to POST', async () => {
+            const newTestimonial = {}
+
+            const response = await api
+                .post('/testimonials')
+                .send(newTestimonial)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toHaveProperty('errors')
+            expect(response.body.errors).toHaveLength(2)    
+            const testimonials = await Testimonial.findAll({ where: {}})
+            const testimonialsAtEnd = testimonials.map(n => n.toJSON())
+
+            expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length)
+        })
+
+        test('name and content cant be empty to POST', async () => {
+            const newTestimonial = {
+                name: '',
+                content: '',
+            }
+
+            const response = await api
+                .post('/testimonials')
+                .send(newTestimonial)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toHaveProperty('errors')
+            expect(response.body.errors).toHaveLength(2)    
+            const testimonials = await Testimonial.findAll({ where: {}})
+            const testimonialsAtEnd = testimonials.map(n => n.toJSON())
+
+            expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length)
+        })
     })
 })
 
