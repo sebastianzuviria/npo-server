@@ -77,7 +77,7 @@ const deleteTestimonial = async (req, res) => {
       await Testimonial.destroy({
         where: { id: id },
       });
-      res.status(200).json({ message: 'Testimonial deleted' });
+      res.status(204);
     } else {
       res
         .status(400)
