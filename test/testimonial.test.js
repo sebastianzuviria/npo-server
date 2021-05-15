@@ -38,3 +38,10 @@ const initialTestimonials = [
 beforeAll(async () => {
     await db.sequelize.sync({ force: false })
 })
+
+beforeEach(async () => {
+    await Testimonial.destroy({ where: {}})
+    await Testimonial.create(initialTestimonials[0])
+    await Testimonial.create(initialTestimonials[1])
+    await Testimonial.create(initialTestimonials[2])
+})
