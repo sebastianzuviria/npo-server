@@ -81,7 +81,7 @@ const deleteTestimonial = async (req, res) => {
     } else {
       res
         .status(404)
-        .json({ error: 'it looks like what you are looking for is not here' });
+        .json({ error: 'Testimonial not exist' });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
