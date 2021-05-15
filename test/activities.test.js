@@ -41,7 +41,7 @@ beforeAll(async () => {
 
 describe('Activities endpoint tests', () => {
 
-    it('(GET) as JSON', async () => {
+    test('(GET) as JSON', async () => {
         await apiTest
             .get('/activities')
             .expect('Content-Type', /json/)
@@ -49,14 +49,14 @@ describe('Activities endpoint tests', () => {
 
     });
 
-    it('(GET) all', async () => {
+    test('(GET) all', async () => {
 
         const res = await apiTest.get('/activities');
         expect(res.body).toHaveLength(initialActivity.length);
 
     });
 
-    it('(GET) by id', async () => {
+    test('(GET) by id', async () => {
 
         const res = await Activity.findAll({ where: {} });
 
@@ -68,7 +68,7 @@ describe('Activities endpoint tests', () => {
         });
     });
 
-    it('(GET) must fail if ID doesn\'t exists', async () => {
+    test('(GET) must fail if ID doesn\'t exists', async () => {
 
         const res = await Activity.findAll({ where: {} });
 
@@ -78,7 +78,7 @@ describe('Activities endpoint tests', () => {
             .expect('Content-Type', /json/);
     });
 
-    it('(POST) new activity', async () => {
+    test('(POST) new activity', async () => {
 
         const { content, image, userId } = initialActivity[0];
 
@@ -88,14 +88,14 @@ describe('Activities endpoint tests', () => {
             .expect(200);
     });
 
-    it('(POST) must fail if a field is empty', async () => {
+    test('(POST) must fail if a field is empty', async () => {
 
         const { content, image } = initialActivity[0];
 
         await apiTest.post('/activities').send({ content, image }).expect(400);
     });
 
-    it('(PUT) /activities', async () => {
+    test('(PUT) /activities', async () => {
 
         const res = await Activity.findAll({ limit: 1, where: {} });
 
@@ -105,7 +105,7 @@ describe('Activities endpoint tests', () => {
             .expect(200);
     });
 
-    it('(PUT) must fail if ID doesn\'t exists', async () => {
+    test('(PUT) must fail if ID doesn\'t exists', async () => {
 
         const res = await Activity.findAll({ where: {} });
 
@@ -115,7 +115,7 @@ describe('Activities endpoint tests', () => {
             .expect(400);
     });
 
-    it('(PUT) must fail if a field is empty', async () => {
+    test('(PUT) must fail if a field is empty', async () => {
 
         const res = await Activity.findAll({ limit: 1, where: {} });
 
@@ -125,7 +125,7 @@ describe('Activities endpoint tests', () => {
             .expect(400);
     });
 
-    it("(DELETE) by ID", async () => {
+    test("(DELETE) by ID", async () => {
         
         const res = await Activity.findAll({ where: {} });
 
@@ -134,7 +134,7 @@ describe('Activities endpoint tests', () => {
                 .expect(200);
     });
 
-    it('(DELETE) must fail if ID doesn\'t exists', async () => {
+    test('(DELETE) must fail if ID doesn\'t exists', async () => {
 
         const res = await Activity.findAll({where: {}, order: [ [ 'id', 'DESC' ]]});
 
