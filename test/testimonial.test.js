@@ -69,6 +69,22 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
 
             expect(response.body).toHaveLength(initialTestimonials.length)
         })
+
+        test('testimonials are returned by id', async () => {
+            const returnedTestimonials = await Testimonial.findAll({ where: {}})
+            await api
+                .get(`/testimonials/${returnedTestimonials[0].dataValues.id}`)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            await api
+                .get(`/testimonials/${returnedTestimonials[1].dataValues.id}`)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            await api
+                .get(`/testimonials/${returnedTestimonials[2].dataValues.id}`)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+        })
     })
 })
 
