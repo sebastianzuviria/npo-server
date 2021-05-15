@@ -62,7 +62,7 @@ beforeEach(async () => {
 })
 
 describe('NOVELTY ENDPOINT TEST', () => {
-    describe('when there is initially some notes saved', () => {
+    describe('when there is initially some novelties saved', () => {
         test('novelties are returned as json', async () => {
             await api
                 .get('/news')
