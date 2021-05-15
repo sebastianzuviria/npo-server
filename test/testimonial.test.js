@@ -58,7 +58,7 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
         test('id is defined', async () => {
             const response = await api.get('/testimonials')
 
-            const ids = response.body.map(n => n.id)
+            const ids = response.body.map(t => t.id)
             expect(ids).toBeDefined()
         })
     })
@@ -118,7 +118,7 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
                 .expect('Content-Type', /application\/json/)
 
             const testimonials = await Testimonial.findAll({ where: {}})
-            const testimonialsAtEnd = testimonials.map(n => n.toJSON())
+            const testimonialsAtEnd = testimonials.map(t => t.toJSON())
     
             expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length + 1)    
         })
@@ -135,7 +135,7 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             expect(response.body).toHaveProperty('errors')
             expect(response.body.errors).toHaveLength(2)    
             const testimonials = await Testimonial.findAll({ where: {}})
-            const testimonialsAtEnd = testimonials.map(n => n.toJSON())
+            const testimonialsAtEnd = testimonials.map(t => t.toJSON())
 
             expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length)
         })
@@ -155,9 +155,23 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             expect(response.body).toHaveProperty('errors')
             expect(response.body.errors).toHaveLength(2)    
             const testimonials = await Testimonial.findAll({ where: {}})
-            const testimonialsAtEnd = testimonials.map(n => n.toJSON())
+            const testimonialsAtEnd = testimonials.map(t => t.toJSON())
 
             expect(testimonialsAtEnd).toHaveLength(initialTestimonials.length)
+        })
+    })
+
+    describe('DELETE tests', () => {
+        test('delete novelty successfully', async () => {
+            const returnedTestimonials = await Testimonial.findAll({ where: {} })
+
+            await api
+                .delete(`/testimonials/${returnedTestimonials[0].dataValues.id}`)
+                .expect(204)
+
+            const testimonials = await Testimonial.findAll({ where: {} })
+            const testimonialsAfterDelete = testimonials.map(t => t.toJSON())
+            expect(testimonialsAfterDelete).toHaveLength(initialTestimonials.length - 1)
         })
     })
 })
