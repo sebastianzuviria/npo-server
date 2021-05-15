@@ -45,3 +45,7 @@ beforeEach(async () => {
     await Testimonial.create(initialTestimonials[1])
     await Testimonial.create(initialTestimonials[2])
 })
+
+describe('TESTIMONIAL ENDOPOINT TEST', () => {
+    
+})
