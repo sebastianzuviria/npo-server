@@ -54,5 +54,16 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
         })
+
+        test('id is defined', async () => {
+            const response = await api.get('/testimonials')
+
+            const ids = response.body.map(n => n.id)
+            expect(ids).toBeDefined()
+        })
     })
+})
+
+afterAll(() => {
+    db.sequelize.close()
 })
