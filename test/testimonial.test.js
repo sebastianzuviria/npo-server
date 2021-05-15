@@ -236,7 +236,21 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
                 .expect('Content-Type', /application\/json/)
 
             expect(response.body).toMatchObject(expected)
-        })   
+        })
+        
+        test('name and content must exist to updated a testimonial', async () => {
+            const returnedTestimonials = await Testimonial.findAll({ where: {} })
+            const newTestimonial = {}
+
+            const response = await api
+                .put(`/news/${returnedTestimonials[0].dataValues.id}`)
+                .send(newTestimonial)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            expect(response.body).toHaveProperty('validationErrors')
+            expect(response.body.validationErrors).toHaveLength(8)    
+        })
     })
 })
 
