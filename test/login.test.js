@@ -9,10 +9,11 @@ const app = require('../app');
 const apiTest = supertest(app);
 
 const testUser = {
-    firstName: 'Demo',
-    lastName: 'Test',
+    firstName: 'Test',
+    lastName: 'User',
     email: 'test@test.com',
     password: 'test1234',
+    roleId: 1
 }
 
 // Clean DB and add testUser before run all tests
@@ -23,7 +24,7 @@ beforeAll( async () => {
         await db.sequelize.sync({ force: false });
         await User.destroy({ where: {} });
 
-        const { firstName, email, lastName, password } = testUser;
+        const { firstName, email, lastName, password, roleId } = testUser;
 
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
@@ -32,7 +33,8 @@ beforeAll( async () => {
                 firstName,
                 lastName,
                 email,
-                password: hash
+                password: hash,
+                roleId
             });
 
     } catch (err) {

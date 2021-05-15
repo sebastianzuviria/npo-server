@@ -24,32 +24,38 @@ const infoUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { email, firstName, lastName } = req.body;
+
+  const { email, firstName, image = null, lastName, roleId } = req.body;
 
   const userExists = await User.findOne({ where: { email: req.body.email } });
 
   try {
     if (!userExists) {
-      bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(req.body.password, salt);
+      
         const newUser = await User.create({
           firstName,
+          image,
           lastName,
           email,
-          password: hashedPassword
+          password: hash,
+          roleId
         });
 
         const { password, ...dataForToken } = newUser.dataValues;
-
         signToken(dataForToken, res);
-      });
+
     } else {
       res.status(409).json({
         message: 'User already registered'
       });
     }
   } catch (err) {
+    console.log( err )
     res.status(500).json({
-      message: 'Could not register user'
+      message: err
     });
   }
 };
