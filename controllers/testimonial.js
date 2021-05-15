@@ -60,7 +60,7 @@ const updateTestimonial = async (req, res) => {
       res.status(200).json(updatedTestimonial);
     } else {
       res
-        .status(400)
+        .status(404)
         .json({ error: 'it looks like what you are looking for is not here' });
     }
   } catch (error) {
