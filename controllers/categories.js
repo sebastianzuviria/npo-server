@@ -56,5 +56,26 @@ module.exports = {
                 'error': error
             });
         }
+    },
+
+    updateCategory: async (request, response) => {
+        const id = request.params.id
+        const body = request.body
+        
+        try {
+            const isUpdatedCategory = await Category.update({
+                name: body.name,
+                description: body.description
+            }, { where: { id: id } })
+
+            if(isUpdatedCategory[0] === 1) {
+                const updatedCategory = await Category.findByPk(id)
+                response.status(200).json(updatedCategory)
+            } else {
+                response.status(404).json({ error: 'Category not exist'})
+            }
+        } catch (error) {
+            response.status(400).json({ error: error.message })
+        }
     }
 }
