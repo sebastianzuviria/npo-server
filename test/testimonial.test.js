@@ -62,6 +62,14 @@ describe('TESTIMONIAL ENDOPOINT TEST', () => {
             expect(ids).toBeDefined()
         })
     })
+
+    describe('GET tests', () => {
+        test('all testimonials are returned', async () => {
+            const response = await api.get('/testimonials')
+
+            expect(response.body).toHaveLength(initialTestimonials.length)
+        })
+    })
 })
 
 afterAll(() => {
