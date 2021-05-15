@@ -1,4 +1,4 @@
-const router = require('./index');
+const testimonialRouter = require('express').Router();
 const {
   newTestimonial,
   getTestimonials,
@@ -9,7 +9,7 @@ const {
 const notEmpty = require('../middlewares/notEmpty');
 const validateBody = require('../middlewares/validateBody');
 
-router.post(
+testimonialRouter.post(
   '/testimonials',
   notEmpty('name'),
   notEmpty('content'),
@@ -17,7 +17,7 @@ router.post(
   newTestimonial
 );
 
-router.put(
+testimonialRouter.put(
   '/testimonials/:id',
   notEmpty('name'),
   notEmpty('content'),
@@ -25,9 +25,10 @@ router.put(
   updateTestimonial
 );
 
-router.delete('/testimonials/:id', deleteTestimonial);
+testimonialRouter.delete('/testimonials/:id', deleteTestimonial);
 
-router.get('/testimonials', getTestimonials);
+testimonialRouter.get('/testimonials', getTestimonials);
 
-router.get('/testimonials/:id', getTestimonialById);
-module.exports = router;
+testimonialRouter.get('/testimonials/:id', getTestimonialById);
+
+module.exports = testimonialRouter;
