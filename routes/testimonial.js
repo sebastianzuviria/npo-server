@@ -10,7 +10,7 @@ const notEmpty = require('../middlewares/notEmpty');
 const validateBody = require('../middlewares/validateBody');
 
 testimonialRouter.post(
-  '/testimonials',
+  '/',
   notEmpty('name'),
   notEmpty('content'),
   validateBody,
@@ -18,17 +18,17 @@ testimonialRouter.post(
 );
 
 testimonialRouter.put(
-  '/testimonials/:id',
+  '/:id',
   notEmpty('name'),
   notEmpty('content'),
   validateBody,
   updateTestimonial
 );
 
-testimonialRouter.delete('/testimonials/:id', deleteTestimonial);
+testimonialRouter.delete('/:id', deleteTestimonial);
 
-testimonialRouter.get('/testimonials', getTestimonials);
+testimonialRouter.get('', getTestimonials);
 
-testimonialRouter.get('/testimonials/:id', getTestimonialById);
+testimonialRouter.get('/:id', getTestimonialById);
 
 module.exports = testimonialRouter;

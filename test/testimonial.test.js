@@ -48,6 +48,11 @@ beforeEach(async () => {
 
 describe('TESTIMONIAL ENDOPOINT TEST', () => {
     describe('when there is initial some testimonials saved', () => {
-    
+        test('testimonials are returned as json', async () => {
+            await api
+                .get('/testimonials')
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+        })
     })
 })
