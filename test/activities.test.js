@@ -77,7 +77,7 @@ describe('Activities endpoint tests', () => {
             .expect(404)
             .expect('Content-Type', /json/);
 
-        const { error } = JSON.parse(response.text);
+        const { error } = response.body;
         expect(error).toBe('Activity not Found');
 
     });
@@ -101,7 +101,7 @@ describe('Activities endpoint tests', () => {
             .send({ content, image })
             .expect(400);
 
-        const { errors } = JSON.parse(response.text);
+        const { errors } = response.body;
         expect(errors[0].msg).toBe('name is mandatory.');
         expect(errors[1].msg).toBe('userId is mandatory.');
 
@@ -126,7 +126,7 @@ describe('Activities endpoint tests', () => {
             .send({ content: 'Content Content', name: 'Edited Activity', userId: 1 })
             .expect(400);
 
-        const { error } = JSON.parse(response.text);
+        const { error } = response.body;
         expect(error).toBe('Activity not Found');
     });
 
@@ -139,7 +139,7 @@ describe('Activities endpoint tests', () => {
             .send({ content: 'Some Content', name: '', userId: 1 })
             .expect(400);
 
-        const { errors } = JSON.parse(response.text);
+        const { errors } = response.body;
         expect(errors[0].msg).toBe('name is mandatory.');
     });
 
@@ -160,7 +160,7 @@ describe('Activities endpoint tests', () => {
             .delete(`/activities/${ res[0].dataValues.id + 1 }`)
             .expect(400);
 
-        const { error } = JSON.parse(response.text);
+        const { error } = response.body;
         expect(error).toBe('Activity not Found');
 
     });
