@@ -91,7 +91,7 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'test1234' })
             .expect(404);
 
-        const { msg } = JSON.parse(response.text);
+        const { msg } = response.body;
 
         expect(msg).toBe('Email not found');
 
@@ -105,7 +105,7 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'test1234' })
             .expect(400);
 
-        const { msg, param } = JSON.parse(response.text).errors[0];
+        const { msg, param } = response.body.errors[0];
 
         expect(param).toBe('email');
         expect(msg).toBe('Invalid value');
@@ -120,7 +120,7 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'test1234' })
             .expect(400);
 
-        const { msg, param } = JSON.parse(response.text).errors[0];
+        const { msg, param } = response.body.errors[0];
 
         expect(param).toBe('email');
         expect(msg).toBe('Invalid value');
@@ -135,7 +135,7 @@ describe('Authentication endpoint tests', () => {
             .send({ password: '' })
             .expect(400);
 
-        const { msg, param } = JSON.parse(response.text).errors[0];
+        const { msg, param } = response.body.errors[0];
 
         expect(param).toBe('password');
         expect(msg).toBe('Invalid value');
@@ -150,7 +150,7 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'tes' })
             .expect(400);
 
-        const { msg, param } = JSON.parse(response.text).errors[0];
+        const { msg, param } = response.body.errors[0];
 
         expect(param).toBe('password');
         expect(msg).toBe('Invalid value');
@@ -165,7 +165,7 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'test1235' })
             .expect(400);
 
-        const { msg } = JSON.parse(response.text);
+        const { msg } = response.body;
 
         expect(msg).toBe('Password doesn\'t match');
 
