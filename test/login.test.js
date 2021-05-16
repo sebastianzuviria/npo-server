@@ -9,9 +9,9 @@ const app = require('../app');
 const apiTest = supertest(app);
 
 const testUser = {
+    email: 'test@test.com',
     firstName: 'Test',
     lastName: 'User',
-    email: 'test@test.com',
     password: 'test1234',
     roleId: 1
 }
@@ -55,6 +55,34 @@ describe('Authentication endpoint tests', () => {
 
     });
 
+    test('(POST) must return a proper user object', async () => {
+
+        const response = await apiTest
+            .post(`/auth/login`)
+            .send({ email: 'test@test.com' })
+            .send({ password: 'test1234' })
+            .expect(200);
+
+        const { firstName, lastName, email, roleId, token } = response.body;
+
+        const resUser = {
+            firstName,
+            lastName,
+            email,
+            roleId
+        }
+
+        // Create a new user without password key
+        const { password, ...newTestUser } = testUser;
+
+        expect(resUser).toMatchObject(newTestUser);
+
+        // Check if token property exists nad it's defined
+        expect(token).toBeTruthy();
+        expect(token).toBeDefined();
+
+    });
+
     test('(POST) must fail if email isn\'t found', async () => {
 
         const response = await apiTest
@@ -62,6 +90,10 @@ describe('Authentication endpoint tests', () => {
             .send({ email: 'none@none.com' })
             .send({ password: 'test1234' })
             .expect(404);
+
+        const { msg } = JSON.parse(response.text);
+
+        expect(msg).toBe('Email not found');
 
     });
 
