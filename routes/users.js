@@ -23,13 +23,13 @@ router.get('/', verifyAdmin, getUsers);
 router.get('/auth/me', infoUser);
 
 /* DELETE (soft or logical) from DB */
-router.delete('/:id', deleteUser);
+router.delete('/', deleteUser);
 
 /* POST a new user (register) */
 router.post(
   '/auth/register',
-  body('firstName', 'First name field is not valid').isAlpha().notEmpty(),
-  body('lastName', 'Last name field is not valid').isAlpha().notEmpty(),
+  body('firstName', 'First name field is not valid').isAlpha(),
+  body('lastName', 'Last name field is not valid').isAlpha(),
   body('roleId', 'You must provide a role ID').notEmpty(),
   isEmail,
   passwordLength,

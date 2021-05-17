@@ -9,7 +9,7 @@ const signToken = (userData, response) => {
   return response.status(200).send({ token, ...userData });
 };
 
-const decodeToken = (request, response) => {
+const decodeToken = (request) => {
   const authorization = request.get('authorization');
 
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -18,10 +18,10 @@ const decodeToken = (request, response) => {
     if (request.token || decodedToken.id) {
       return decodedToken;
     } else {
-      return response.status(401).json({ error: 'token invalid' });
+      return false;
     }
   } else {
-    return response.status(401).json({ error: 'token missing' });
+    return false;
   }
 };
 
