@@ -64,5 +64,14 @@ module.exports = {
         } catch (error) {
             res.status(400).json({ error: error.message })
         }
+    },
+    deleteCategory: async(req,res) => {
+        try {
+
+            await Category.destroy({ where: { id: req.params.id } });
+            return res.status(200).json({ message: 'Category deleted successfuly' });
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
     }
 }
