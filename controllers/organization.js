@@ -1,4 +1,4 @@
-const { Organization } = require("../models/index");
+const { Organization, Socialmediacontact} = require("../models/index");
 
 const getOrganization = async (req, res) => {
 
@@ -12,7 +12,6 @@ const getOrganization = async (req, res) => {
 
         });
 
-        
         if(!organization){
             return res.status(404).json( { message: 'Organization not Found' } );
         }
@@ -26,4 +25,35 @@ const getOrganization = async (req, res) => {
     }
 };
 
-module.exports = getOrganization;
+
+const updateOrganization = async (req, res) => {
+    console.log(req.body);
+    const {name, image, facebook, instagram,linkedin} = req.body
+    try{
+
+        const idOrganization = await Organization.findOne( {
+            attributes: ["id"]
+        } );
+
+        const id= idOrganization.dataValues.id;
+
+        const organizationUpdate = await Organization.update({
+            name,
+            image,
+        }, { where: { id } });
+
+        const socialmediaUpdate = await Socialmediacontact.update({
+            facebook,
+            instagram,
+            linkedin
+        }, { where: {organizationId:id }});
+
+        return res.status(200).json({message: 'Información actualizada'});
+    }
+    catch(err){
+        res.status(500).json(err)
+    }
+};
+
+
+module.exports = {getOrganization, updateOrganization};

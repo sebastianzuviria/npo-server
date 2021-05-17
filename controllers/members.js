@@ -64,7 +64,38 @@ module.exports = {
         } catch (err) {
             res.status(500).json({ err: err.message });
         };
+    },
+
+    updateMember: async (req, res)=>{
+
+        const id = req.params.id;
+        const {name, image}= req.body;
+
+        
+        try {
+            const member = await Members.findByPk( id );
+
+            if(member){
+
+                const memberUpdate= await member.update({
+                    name,
+                    image 
+                }, { where: { id } } );
+
+                return res.status(200).json(memberUpdate);
+
+            }
+            else{
+                return res.status(404).json( { message: 'Member not Found' } );
+            }
+
+        }
+        catch(err){
+            res.status(500).json({ err: err.message });
+        }
+
     }
+    
 
 }
     

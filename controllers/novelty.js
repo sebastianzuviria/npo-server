@@ -35,9 +35,9 @@ const getNoveltyById = async (request, response) => {
             attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
         });
         if (noveltyReturned){ 
-            response.json(noveltyReturned);
+            response.status(200).json(noveltyReturned);
         } else {
-            response.status(400).json({ error: 'new not exist' });
+            response.status(404).json({ error: 'new not exist' });
         }
     } catch (error) {
         response.status(400).json({ error: error.message });
@@ -55,9 +55,9 @@ const deleteNovelty = async (request, response) => {
                     id: id
                 }
             });
-            response.status(204).json({ message: 'New deleted' });
+            response.status(204).end();
         } else {
-            response.status(400).json({ error: 'New not exist' });
+            response.status(404).json({ error: 'New not exist' });
         }
     } catch (error) {
         response.status(400).json({ error: error.message });
@@ -121,7 +121,7 @@ const updateNovelty = async (request, response) => {
                 const updatedNovelty = await Novelty.findByPk(id)
                 response.status(200).json(updatedNovelty);
             } else {
-                response.status(400).json({ error: 'New not exist'})
+                response.status(404).json({ error: 'New not exist'})
             } 
         // } else {
         //   response.status(400).json({ error: 'category not exist'});  
