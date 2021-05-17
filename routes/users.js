@@ -4,6 +4,8 @@ const router = express.Router();
 // middlewares
 const { verifyAdmin } = require('../middlewares/verifyRoles');
 const validateBody = require('../middlewares/validateBody');
+const isEmail = require('../middlewares/isEmail');
+const passwordLength = require('../middlewares/passwordLength');
 
 // utils
 const { body } = require('express-validator');
@@ -28,8 +30,9 @@ router.post(
   '/auth/register',
   body('firstName', 'First name field is not valid').isAlpha().notEmpty(),
   body('lastName', 'Last name field is not valid').isAlpha().notEmpty(),
-  body('email', 'The email is not valid').isEmail().notEmpty(),
-  body('password', 'The password is not valid').isLength({ min: 6 }).notEmpty(),
+  body('roleId', 'You must provide a role ID').notEmpty(),
+  isEmail,
+  passwordLength,
   validateBody,
   registerUser
 );
