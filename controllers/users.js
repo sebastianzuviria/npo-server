@@ -6,7 +6,7 @@ const { signToken, decodeToken } = require('../utils/jsonwebtoken');
 
 const infoUser = async (req, res) => {
   try {
-    const token = decodeToken(req, res);
+    const token = decodeToken(req );
     if (!token)
       return res.status(401).json({ error: 'token invalid or missing' });
 
