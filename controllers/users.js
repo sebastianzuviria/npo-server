@@ -2,14 +2,15 @@
 
 const { User, Role } = require('../models/index');
 const bcrypt = require('bcrypt');
-const { signToken } = require('../utils/jsonwebtoken');
+const { signToken, decodeToken } = require('../utils/jsonwebtoken');
 
 const infoUser = async (req, res) => {
   try {
+    const { id } = decodeToken(req, res);
     const user = await User.findOne({
-      attributes: ['firstName', 'lastName', 'email'],
+      attributes: ['firstName', 'lastName', 'email', 'id', 'roleId'],
       where: {
-        id: req.params.id
+        id
       }
     });
 

@@ -18,7 +18,7 @@ const {
 
 /* GET users listing. */
 router.get('/', verifyAdmin, getUsers);
-router.get('/:id', infoUser);
+router.get('/auth/me', infoUser);
 
 /* DELETE (soft or logical) from DB */
 router.delete('/:id', deleteUser);
