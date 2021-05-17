@@ -1,28 +1,23 @@
-const {decodeToken} = require('../utils/jsonwebtoken');
+const { decodeToken } = require('../utils/jsonwebtoken');
 const { Role } = require('../models/index');
 
 module.exports = {
+  verifyAdmin: async (req, res, next) => {
+    try {
+      const token = decodeToken(req);
+      if (!token)
+        return res.status(401).json({ error: 'token invalid or missing' });
+      const { roleId } = token;
 
-    verifyAdmin: async (req, res, next) => {
-        
-        try{
-            const { roleId } = decodeToken(req, res);
-            
-            const isRole = await Role.findByPk(roleId,{
+      const isRole = await Role.findByPk(roleId, {
+        attributes: ['name']
+      });
+      if (isRole.name !== 'Admin')
+        return res.status(401).json({ msg: 'You are not authorized' });
 
-                attributes:['name']
-
-            })
-            
-            if (isRole.name !== "Admin") throw new Error('Not authorized')
-
-            next()
-            
-        }catch(error){
-            
-            res.status(403).json({status: 403, error: error.message})
-        }
-        
+      next();
+    } catch (error) {
+      res.status(500).json(error).send();
     }
-        
-}
+  }
+};
