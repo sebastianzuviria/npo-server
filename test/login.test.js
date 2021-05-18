@@ -63,21 +63,20 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'test1234' })
             .expect(200);
 
-        const { firstName, lastName, email, roleId, token } = response.body;
+        const { firstName, lastName, email, token } = response.body;
 
         const resUser = {
             firstName,
             lastName,
             email,
-            roleId
         }
 
         // Create a new user without password key
-        const { password, ...newTestUser } = testUser;
+        const { password, roleId, ...newTestUser } = testUser;
 
         expect(resUser).toMatchObject(newTestUser);
 
-        // Check if token property exists nad it's defined
+        // Check if token property exists and it's defined
         expect(token).toBeTruthy();
         expect(token).toBeDefined();
 
