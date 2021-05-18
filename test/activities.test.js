@@ -27,12 +27,13 @@ const initialActivity = [
 beforeAll(async () => {
 
     try {
-        await db.sequelize.sync({ force: false });
+        
         await Activity.destroy({ where: {} });
+        await db.sequelize.sync({ force: false });
 
-        initialActivity.map(async (data) => {
-            await Activity.create(data);
-        });
+        await Activity.create(initialActivity[0]);
+        await Activity.create(initialActivity[1]);
+
     } catch (err) {
         console.log(err);
     }
