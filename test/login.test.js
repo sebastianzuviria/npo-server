@@ -43,9 +43,9 @@ beforeAll( async () => {
 
 });
 
-describe('Authentication endpoint tests', () => {
+describe('AUTHENTICATION ENDPOINT TESTS', () => {
 
-    test('(POST) must properly login', async () => {
+    test('USER must properly login', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -55,7 +55,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must return a proper user object', async () => {
+    test('POST must return a proper user object', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -89,7 +89,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if email isn\'t found', async () => {
+    test('POST must fail if email isn\'t found', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -103,7 +103,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if email is empty', async () => {
+    test('POST must fail if email is empty', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -118,7 +118,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if email is invalid', async () => {
+    test('POST must fail if email is invalid', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -133,7 +133,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if password is empty', async () => {
+    test('POST must fail if password is empty', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -148,7 +148,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if password length is invalid', async () => {
+    test('POST must fail if password length is invalid', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -163,7 +163,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if password doesn\'t match', async () => {
+    test('POST must fail if password doesn\'t match', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
