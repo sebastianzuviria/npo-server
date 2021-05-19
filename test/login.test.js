@@ -43,9 +43,9 @@ beforeAll( async () => {
 
 });
 
-describe('Authentication endpoint tests', () => {
+describe('AUTHENTICATION ENDPOINT TESTS', () => {
 
-    test('(POST) must properly login', async () => {
+    test('USER must properly login', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -55,7 +55,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must return a proper user object', async () => {
+    test('POST must return a proper user object', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -63,17 +63,23 @@ describe('Authentication endpoint tests', () => {
             .send({ password: 'test1234' })
             .expect(200);
 
-        const { firstName, lastName, email, roleId, token } = response.body;
+        const { firstName, lastName, email, token } = response.body;
 
         const resUser = {
             firstName,
             lastName,
-            email,
-            roleId
+            email
         }
 
+
         // Create a new user without password key
-        const { password, ...newTestUser } = testUser;
+        const newTestUser = {
+
+            email: testUser.email,
+            firstName: testUser.firstName,
+            lastName: testUser.lastName,
+            
+        }
 
         expect(resUser).toMatchObject(newTestUser);
 
@@ -83,7 +89,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if email isn\'t found', async () => {
+    test('POST must fail if email isn\'t found', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -97,7 +103,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if email is empty', async () => {
+    test('POST must fail if email is empty', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -112,7 +118,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if email is invalid', async () => {
+    test('POST must fail if email is invalid', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -127,7 +133,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if password is empty', async () => {
+    test('POST must fail if password is empty', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -142,7 +148,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if password length is invalid', async () => {
+    test('POST must fail if password length is invalid', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
@@ -157,7 +163,7 @@ describe('Authentication endpoint tests', () => {
 
     });
 
-    test('(POST) must fail if password doesn\'t match', async () => {
+    test('POST must fail if password doesn\'t match', async () => {
 
         const response = await apiTest
             .post(`/auth/login`)
