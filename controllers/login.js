@@ -8,7 +8,15 @@ const login = async (req, res) => {
 
     const user = await User.findOne({
       where: { email },
-      attributes: ['id', 'image', 'firstName', 'lastName', 'email', 'password'],
+      attributes: [
+        'id',
+        'image',
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'roleId'
+      ],
       include: { model: Role, as: 'role', attributes: ['name'] }
     });
     if (!user)
