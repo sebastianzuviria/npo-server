@@ -33,3 +33,21 @@ const uploadImage = (file) => {
     s3.upload(params).promise()
 }
 
+const deleteImage = (imageUrl) => {
+    const urlSplited = imageUrl.split('/')
+    const imageName = urlSplited[urlSplited.length - 1]
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: imageName
+    }
+
+    s3.deleteObject(params).promise()
+}
+
+const uploadImgServices = {
+    uploadImage,
+    deleteImage
+}
+
+module.exports = uploadImgServices
