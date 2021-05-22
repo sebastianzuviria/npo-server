@@ -14,7 +14,7 @@ const storage = multer.memoryStorage({
     }
 })
 
-const upload = multer({ storage }).single('image')
+const middleware = multer({ storage }).single('image')
 
 //-------------------------------------------------//
 
@@ -54,7 +54,7 @@ const deleteImage = (imageUrl) => {
 const uploadImgServices = {
     uploadImage,
     deleteImage,
-    upload
+    middleware
 }
 
 module.exports = uploadImgServices
