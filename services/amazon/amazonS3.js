@@ -14,11 +14,11 @@ const storage = multer.memoryStorage({
     }
 })
 
-exports.upload = multer({ storage }).single('image')
+const upload = multer({ storage }).single('image')
 
 //-------------------------------------------------//
 
-const uploadImage = (file) => {
+const uploadImage = async (file) => {
     const myFile = file.originalname.split('.')
     const fileType = myFile[myFile.length -1]
 
@@ -30,7 +30,10 @@ const uploadImage = (file) => {
         ACL: 'public-read'
     }
 
-    s3.upload(params).promise()
+    return new Promise((resolve, reject) => s3.upload(params, (error, data) => {
+        if (error) reject(error)
+        else resolve(data)
+    }))
 }
 
 const deleteImage = (imageUrl) => {
@@ -42,12 +45,16 @@ const deleteImage = (imageUrl) => {
         Key: imageName
     }
 
-    s3.deleteObject(params).promise()
+    return new Promise((resolve, reject) => s3.deleteObject(params, (error, data) => {
+        if (error) reject(error)
+        else resolve(data)
+    }))
 }
 
 const uploadImgServices = {
     uploadImage,
-    deleteImage
+    deleteImage,
+    upload
 }
 
 module.exports = uploadImgServices
