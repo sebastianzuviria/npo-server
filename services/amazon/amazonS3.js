@@ -18,3 +18,18 @@ exports.upload = multer({ storage }).single('image')
 
 //-------------------------------------------------//
 
+const uploadImage = (file) => {
+    const myFile = file.originalname.split('.')
+    const fileType = myFile[myFile.length -1]
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        ContentType: file.mimetype,
+        Key: `${uuidv4()}.${fileType}`,
+        Body: file.buffer,
+        ACL: 'public-read'
+    }
+
+    s3.upload(params).promise()
+}
+
