@@ -19,7 +19,6 @@ const noveltyRouter = require('./routes/novelty');
 const testimonialsRouter = require('./routes/testimonial');
 const memberRouter = require('./routes/members');
 
-
 const app = express();
 app.use(cors());
 
