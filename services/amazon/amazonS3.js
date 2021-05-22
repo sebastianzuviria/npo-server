@@ -1,20 +1,20 @@
-require('dotenv').config()
 const AWS = require('aws-sdk')
+const multer = require('multer')
+const { v4: uuidv4 } = require('uuid')
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY
 })
 
-s3.listBuckets({}, (error, data) => {
-    if(error) throw error;
-    console.log(data)
+//MIDDLEWARE TO SAVE IMAGE 
+const storage = multer.memoryStorage({
+    destination: (req, file, callback) => {
+        callback(null, '')
+    }
 })
 
-const params = {
-    Bucket: 'ong-team-27'
-}
+exports.upload = multer({ storage }).single('image')
 
-s3.listObjectsV2(params, (error, data) => {
-    if (error) throw error
-    console.log(data)
-})
+//-------------------------------------------------//
+
