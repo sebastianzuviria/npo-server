@@ -60,7 +60,7 @@ app.use('/members', memberRouter);
 //      res.status(500).json(error)
 //    }
 //  })
-
+//
 //  app.delete('/images', async (req, res) => {
 //    console.log(req.body)
 //    try {

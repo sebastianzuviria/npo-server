@@ -3,19 +3,15 @@ const multer = require('multer')
 const { v4: uuidv4 } = require('uuid')
 const allConfigs = require('../../config/config')
 
-const config = () => {
-    if(process.env.NODE_ENV === 'production') {
-        return allConfigs.production
-    } else if (process.env.NODE_ENV === 'development') {
-        return allConfigs.development
-    } else {
-        return allConfigs.test
-    }
+const config = {
+    'production': allConfigs.production,
+    'development': allConfigs.development,
+    'test': allConfigs.test
 }
 
 const s3 = new AWS.S3({
-    accessKeyId: config().aws_access_key_id,
-    secretAccessKey: config().aws_secret_access_key
+    accessKeyId: config[process.env.NODE_ENV].aws_access_key_id,
+    secretAccessKey: config[process.env.NODE_ENV].aws_secret_access_key
 })
 
 //MIDDLEWARE TO SAVE IMAGE 
@@ -35,7 +31,7 @@ const uploadImage = async (file) => {
     const fileType = myFile[myFile.length -1]
 
     const params = {
-        Bucket: config().aws_s3_bucket_name,
+        Bucket: config[process.env.NODE_ENV].aws_s3_bucket_name,
         ContentType: file.mimetype,
         Key: `${uuidv4()}.${fileType}`,
         Body: file.buffer,
@@ -53,7 +49,7 @@ const deleteImage = (imageUrl) => {
     const imageName = urlSplited[urlSplited.length - 1]
 
     const params = {
-        Bucket: config().aws_s3_bucket_name,
+        Bucket: config[process.env.NODE_ENV].aws_s3_bucket_name,
         Key: imageName
     }
 
