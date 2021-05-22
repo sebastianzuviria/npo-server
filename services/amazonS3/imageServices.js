@@ -28,18 +28,22 @@ const uploadImage = async (file) => {
     const myFile = file.originalname.split('.')
     const fileType = myFile[myFile.length -1]
 
-    const params = {
-        Bucket: config[process.env.NODE_ENV].aws_s3_bucket_name,
-        ContentType: file.mimetype,
-        Key: `${uuidv4()}.${fileType}`,
-        Body: file.buffer,
-        ACL: 'public-read'
-    }
+    if (file.mimetype.startsWith("image")){
+        const params = {
+            Bucket: config[process.env.NODE_ENV].aws_s3_bucket_name,
+            ContentType: file.mimetype,
+            Key: `${uuidv4()}.${fileType}`,
+            Body: file.buffer,
+            ACL: 'public-read'
+        }
 
-    return new Promise((resolve, reject) => s3.upload(params, (error, data) => {
-        if (error) reject(error)
-        else resolve(data.Location)
-    }))
+        return new Promise((resolve, reject) => s3.upload(params, (error, data) => {
+            if (error) reject(error)
+            else resolve(data.Location)
+        }))
+    } else {
+        return new Promise((resolve, reject) => reject('File is not an image'))
+    }
 }
 
 const deleteImage = (imageUrl) => {
