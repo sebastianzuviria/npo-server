@@ -32,7 +32,7 @@ const uploadImage = async (file) => {
 
     return new Promise((resolve, reject) => s3.upload(params, (error, data) => {
         if (error) reject(error)
-        else resolve(data)
+        else resolve(data.Location)
     }))
 }
 
