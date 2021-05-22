@@ -8,13 +8,14 @@ const s3 = new AWS.S3({
 })
 
 //MIDDLEWARE TO SAVE IMAGE 
+
 const storage = multer.memoryStorage({
     destination: (req, file, callback) => {
         callback(null, '')
     }
 })
 
-const middleware = multer({ storage }).single('image')
+const uploadMiddleware = multer({ storage }).single('image')
 
 //-------------------------------------------------//
 
@@ -51,10 +52,10 @@ const deleteImage = (imageUrl) => {
     }))
 }
 
-const uploadImgServices = {
+const imageServices = {
     uploadImage,
     deleteImage,
-    middleware
+    uploadMiddleware
 }
 
-module.exports = uploadImgServices
+module.exports = imageServices
