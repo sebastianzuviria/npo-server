@@ -16,13 +16,11 @@ const s3 = new AWS.S3({
 
 //MIDDLEWARE TO SAVE IMAGE 
 
-const storage = multer.memoryStorage({
+const uploadMiddleware = multer({ storage: multer.memoryStorage({
     destination: (req, file, callback) => {
         callback(null, '')
     }
-})
-
-const uploadMiddleware = multer({ storage }).single('image')
+}) }).single('image')
 
 //-------------------------------------------------//
 
