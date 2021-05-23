@@ -20,13 +20,6 @@ const initial = [
     }
 ]
 
-beforeAll( async ()=> {
-    
-    
-    
-})
-
-
 describe('/organizations/public',() => {
 
     test('GET status 200 if exist', async () => {
