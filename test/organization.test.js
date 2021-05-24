@@ -36,10 +36,10 @@ beforeAll(async () => {
 
         facebook: initial[0].socialmedia.facebook,
         instagram: initial[0].socialmedia.instagram,
-        linkedin: initial[0].socialmedia.linkedin
-
-        }, { where: {organizationId : organizationCreated.id }
-    });
+        linkedin: initial[0].socialmedia.linkedin,
+        organizationId: organizationCreated.id
+        }
+    );
   
 })
 
