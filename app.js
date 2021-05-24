@@ -45,6 +45,32 @@ app.use('/news', noveltyRouter);
 app.use('/testimonials', testimonialsRouter);
 app.use('/members', memberRouter);
 
+//------EXAMPLE TO USE AMAZON S3 SERVICES TO UPLOAD AND DELETE IMAGE------
+//
+//  const imageServices = require('./services/amazonS3/imageServices')
+//
+//  app.post('/images', imageServices.uploadMiddleware, async (req, res) => {
+//    console.log(req.body)
+//    console.log(req.file)
+//    try{
+//      const urlOfImage = await imageServices.uploadImage(req.file)
+//      console.log(urlOfImage)  
+//      res.status(200).send(urlOfImage)
+//    } catch (error) {
+//      res.status(500).json(error)
+//    }
+//  })
+//
+//  app.delete('/images', async (req, res) => {
+//    console.log(req.body)
+//    try {
+//      await imageServices.deleteImage(req.body.url)
+//      res.status(204).end()
+//    } catch (error) {
+//      res.status(500).json(error)
+//    }
+//  })
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
