@@ -14,7 +14,7 @@ const getNovelties = async (request, response) => {
             where: {
                 type: 'news'
             }, 
-            attributes: ['id', 'title', 'image', 'createdAt'],
+            attributes: ['id', 'content', 'title', 'image', 'createdAt'],
             order: [['createdAt', 'DESC']]
         });
         response.status(200).json(noveltiesReturned);
