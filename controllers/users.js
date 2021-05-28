@@ -1,16 +1,13 @@
 'use-strict';
 
 const { User, Role } = require('../models/index');
-const bcrypt = require('bcrypt');
+const encryptPassword = require('../utils/encrypt');
 const { signToken, decodeToken } = require('../utils/jsonwebtoken');
 
 const infoUser = async (req, res) => {
   try {
-    const token = decodeToken(req );
-    if (!token)
-      return res.status(401).json({ error: 'token invalid or missing' });
-
-    const { id } = token;
+    // Esto funciona solamente si se usa el middleware userIsLogged
+    const { id } = req.user;
     const user = await User.findOne({
       attributes: ['firstName', 'lastName', 'email', 'id', 'roleId'],
       where: {
@@ -27,22 +24,17 @@ const infoUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { email, firstName, image = null, lastName, roleId } = req.body;
-
-  const userExists = await User.findOne({ where: { email: req.body.email } });
-
   try {
-    if (!userExists) {
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(req.body.password, salt);
+    const { email, firstName, lastName } = req.body;
+    const userExists = await User.findOne({ where: { email } });
 
+    if (!userExists) {
+      const hash = await encryptPassword(req.body.password);
       const newUser = await User.create({
         firstName,
-        image,
         lastName,
         email,
-        password: hash,
-        roleId
+        password: hash
       });
 
       const { password, ...dataForToken } = newUser.dataValues;
@@ -53,9 +45,8 @@ const registerUser = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({
-      message: err
+      message: err.message
     });
   }
 };
@@ -92,9 +83,43 @@ const getUsers = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    // Esto funciona solamente si se usa el middleware userIsLogged
+    const { id } = req.user;
+    const userUpdated = await User.update({ ...req.body }, { where: { id } });
+
+    if (!userUpdated)
+      return res.status(404).json({ message: 'User not found' });
+
+    const attributes = Object.keys(req.body);
+    const { dataValues: updatedData } = await User.findByPk(id, {
+      attributes
+    });
+    return res.status(200).json(updatedData);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const updateRoleId = async (req, res) => {
+  try {
+    const { roleId } = req.body;
+    const { id } = req.params;
+
+    const updated = await User.update({ roleId }, { where: { id } });
+    if (!updated) return res.status(404).json({ message: 'User not found' });
+    return res.status(200).json({ ok: true, message: 'RoleId updated!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   infoUser,
   registerUser,
   deleteUser,
-  getUsers
+  getUsers,
+  updateProfile,
+  updateRoleId
 };
