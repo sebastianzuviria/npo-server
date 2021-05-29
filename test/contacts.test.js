@@ -24,7 +24,7 @@ beforeAll(async () => {
 
 describe('Contacts endpoint test', () => {
   describe('GET contacts', () => {
-    test('Trying to get a list of contacts being a normal user returns 401 error', async () => {
+    test('Trying to get a list of contacts being a normal user should return 401 error', async () => {
       const user = await User.findOne({
         where: { email: 'jose@mail.com' },
       });
@@ -42,7 +42,7 @@ describe('Contacts endpoint test', () => {
         .expect(401);
     });
 
-    test('Trying to get a list of contacts being admin returns response 201', async () => {
+    test('Trying to get a list of contacts being admin should return response 200', async () => {
       const user = await User.findOne({
         where: { email: 'franco@email.com' },
       });
