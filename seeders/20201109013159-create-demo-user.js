@@ -1,7 +1,6 @@
 'use strict';
 
 const encryptPassword = require('../utils/encrypt');
-const { User } = require('../models/index');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
