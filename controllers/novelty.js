@@ -77,20 +77,20 @@ const createNovelty = async (request, response) => {
       }).end();
     } else {
       try {
-        // const category = await Category.findOne({ where: { name: body.category }});
-        // if(category) {
-        const urlOfImage = await imageServices.uploadImage(request.file)
-        const newNovelty = await Novelty.create({
-            title: body.title,
-            image: urlOfImage,
-            content: body.content,
-            categoryId: body.category,
-            type: 'news'
-        });
+        const category = await Category.findByPk(body.category);
+        if(category) {
+            const urlOfImage = await imageServices.uploadImage(request.file)
+            const newNovelty = await Novelty.create({
+                title: body.title,
+                image: urlOfImage,
+                content: body.content,
+                categoryId: category.id,
+                type: 'news'
+            });
             response.status(201).json(newNovelty);
-        // } else {
-        //   response.status(400).json({ error: 'category not exist'});  
-        // }
+        } else {
+           response.status(400).json({ error: 'category not exist'});  
+        }
       } catch (error) {
         response.status(400).json({ error: error.message });
       }
@@ -111,8 +111,8 @@ const updateNovelty = async (request, response) => {
       }).end();
     } else {
       try {
-        // const category = await Category.findOne({ where: { name: body.category }});
-        // if(category) {
+        const category = await Category.findByPk(body.category);
+        if(category) {
             const urlOfImage = async () => {
                 if(request.file) {
                     const url = await imageServices.uploadImage(request.file)
@@ -127,7 +127,7 @@ const updateNovelty = async (request, response) => {
                 title: body.title,
                 image: await urlOfImage(),
                 content: body.content,
-                categoryId: body.category,
+                categoryId: category.id,
                 type: 'news'
             }, { where: { id: id } });
             if(isUpdatedNovelty[0] === 1) {
@@ -136,9 +136,9 @@ const updateNovelty = async (request, response) => {
             } else {
                 response.status(404).json({ error: 'New not exist'})
             } 
-        // } else {
-        //   response.status(400).json({ error: 'category not exist'});  
-        // }
+        } else {
+           response.status(400).json({ error: 'category not exist'});  
+        }
       } catch (error) {
         response.status(400).json({ error: error.message });
       }
