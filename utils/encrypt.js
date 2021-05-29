@@ -18,8 +18,6 @@ const saltRounds = 10; // Can be placed in an eviroment variable
 // }
 
 async function encryptPassword (password) {
-    let saltRounds = await bcrypt.genSalt(saltRounds);
-
     if (saltRounds) {
         let hashedPassword = await bcrypt.hash(password, saltRounds);
 

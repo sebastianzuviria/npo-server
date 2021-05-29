@@ -1,5 +1,4 @@
 const { Novelty } = require('../models/index');
-// const { Category } = require('../models/index')
 const imageServices = require('../services/amazonS3/imageServices')
 const { validationResult } = require('express-validator');
 
@@ -8,10 +7,10 @@ const getNovelties = async (request, response) => {
 
     try {
         const noveltiesReturned = await Novelty.findAll({
-            // include: {
-            //     model: Category,
-            //     attributes: ['name']
-            // },
+            include: {
+                association: "category",
+                attributes: ["id","name"],
+            },
             where: {
                 type: 'news'
             }, 
@@ -29,11 +28,11 @@ const getNoveltyById = async (request, response) => {
 
     try {
         const noveltyReturned = await Novelty.findByPk(id, {
-            // include: {
-            //     model: Category,
-            //     attributes: ['name']
-            // },
-            attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
+            include: {
+                association: "category",
+                attributes: ["id","name"],
+            },
+            attributes: ['id', 'title', 'image', 'content', 'type', 'createdAt'],
         });
         if (noveltyReturned){ 
             response.status(200).json(noveltyReturned);
@@ -85,8 +84,7 @@ const createNovelty = async (request, response) => {
             title: body.title,
             image: urlOfImage,
             content: body.content,
-            //categoryId: category.id
-            categoryId: 1,
+            categoryId: body.category,
             type: 'news'
         });
             response.status(201).json(newNovelty);
@@ -129,8 +127,7 @@ const updateNovelty = async (request, response) => {
                 title: body.title,
                 image: await urlOfImage(),
                 content: body.content,
-                //categoryId: category.id
-                categoryId: 1,
+                categoryId: body.category,
                 type: 'news'
             }, { where: { id: id } });
             if(isUpdatedNovelty[0] === 1) {
