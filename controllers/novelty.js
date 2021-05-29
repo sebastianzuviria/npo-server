@@ -1,5 +1,6 @@
 const { Novelty } = require('../models/index');
 // const { Category } = require('../models/index')
+const imageServices = require('../services/amazonS3/imageServices')
 const { validationResult } = require('express-validator');
 
 
@@ -65,6 +66,8 @@ const deleteNovelty = async (request, response) => {
 };
 
 const createNovelty = async (request, response) => {
+    console.log('BODY: ', request.body)
+    console.log('FILE: ', request.file)
     const body = request.body;
     const validationErrors = validationResult(request);
 
@@ -77,9 +80,10 @@ const createNovelty = async (request, response) => {
       try {
         // const category = await Category.findOne({ where: { name: body.category }});
         // if(category) {
+        const urlOfImage = await imageServices.uploadImage(request.file)
         const newNovelty = await Novelty.create({
             title: body.title,
-            image: body.image,
+            image: urlOfImage,
             content: body.content,
             //categoryId: category.id
             categoryId: 1,
@@ -96,6 +100,8 @@ const createNovelty = async (request, response) => {
 }
 
 const updateNovelty = async (request, response) => {
+    console.log('BODY: ', request.body)
+    console.log('FILE: ', request.file)
     const id = request.params.id
     const body = request.body;
     const validationErrors = validationResult(request);
@@ -109,9 +115,19 @@ const updateNovelty = async (request, response) => {
       try {
         // const category = await Category.findOne({ where: { name: body.category }});
         // if(category) {
+            const urlOfImage = async () => {
+                if(request.file) {
+                    const url = await imageServices.uploadImage(request.file)
+                    await imageServices.deleteImage(body.image)
+                    return url
+                } else {
+                    return body.image
+                }
+            }
+            
             const isUpdatedNovelty = await Novelty.update({
                 title: body.title,
-                image: body.image,
+                image: await urlOfImage(),
                 content: body.content,
                 //categoryId: category.id
                 categoryId: 1,
