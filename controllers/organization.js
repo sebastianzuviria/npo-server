@@ -1,4 +1,6 @@
 const { Organization, Socialmediacontact} = require("../models/index");
+const imageServices = require('../services/amazonS3/imageServices')
+
 
 const getOrganization = async (req, res) => {
 
@@ -16,7 +18,6 @@ const getOrganization = async (req, res) => {
             return res.status(404).json( { message: 'Organization not Found' } );
         }
         else{
-            console.log(organization)
             return res.status(200).json(organization);
         }
     }
@@ -28,7 +29,19 @@ const getOrganization = async (req, res) => {
 
 const updateOrganization = async (req, res) => {
 
-    const {name, image, phone, address, facebook, instagram,linkedin} = req.body
+    const {name,imageurl, phone, address, facebook, instagram,linkedin} = req.body
+
+    const urlOfImage = async () => {
+        if(req.file) {
+            const url = await imageServices.uploadImage(req.file);
+
+            await imageServices.deleteImage(imageurl);
+            return url
+        } else {
+            return imageurl
+        }
+    }
+
     try{
 
         const idOrganization = await Organization.findOne( {
@@ -39,7 +52,7 @@ const updateOrganization = async (req, res) => {
 
         const organizationUpdate = await Organization.update({
             name,
-            image,
+            image: await urlOfImage(),
             phone,
             address
         }, { where: { id } });
