@@ -11,7 +11,6 @@ const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const organizationRouter = require('./routes/organization');
 const contactRouter = require('./routes/contact');
-const backofficeRouter = require('./routes/backoffice');
 const activitiesRouter = require('./routes/activities');
 const membersRouter = require('./routes/members');
 const categoriesRouter = require('./routes/category');
@@ -34,7 +33,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/backoffice', backofficeRouter);
 app.use('/auth', loginRouter);
 app.use('/organizations', organizationRouter);
 app.use('/contacts', contactRouter);
@@ -54,7 +52,7 @@ app.use('/members', memberRouter);
 //    console.log(req.file)
 //    try{
 //      const urlOfImage = await imageServices.uploadImage(req.file)
-//      console.log(urlOfImage)  
+//      console.log(urlOfImage)
 //      res.status(200).send(urlOfImage)
 //    } catch (error) {
 //      res.status(500).json(error)
