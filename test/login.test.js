@@ -1,8 +1,8 @@
-'use-strict'
+'use-strict';
 
 const db = require('../models/index');
-const { User, Role } = require('../models/index');
-const bcrypt = require('bcrypt');
+const { User } = require('../models/index');
+const encryptPassword = require('../utils/encrypt');
 
 const supertest = require('supertest');
 const app = require('../app');
@@ -26,8 +26,7 @@ beforeAll( async () => {
 
         const { firstName, email, lastName, password, roleId } = testUser;
 
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(password, salt);
+        const hash = await encryptPassword(password);
 
             await User.create({
                 firstName,
@@ -82,8 +81,9 @@ describe('AUTHENTICATION ENDPOINT TESTS', () => {
         }
 
         expect(resUser).toMatchObject(newTestUser);
+        
 
-        // Check if token property exists nad it's defined
+        // Check if token property exists and it's defined
         expect(token).toBeTruthy();
         expect(token).toBeDefined();
 
