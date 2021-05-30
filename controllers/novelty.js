@@ -8,14 +8,10 @@ const getNovelties = async (request, response) => {
 
     try {
         const noveltiesReturned = await Novelty.findAll({
-            include: {
-                association: "category",
-                attributes: ["id","name"],
-            },
             where: {
                 type: 'news'
             }, 
-            attributes: ['id', 'content', 'title', 'image', 'createdAt'],
+            attributes: ['id', 'title', 'image', 'createdAt'],
             order: [['createdAt', 'DESC']]
         });
         response.status(200).json(noveltiesReturned);
