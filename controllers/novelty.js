@@ -1,4 +1,5 @@
 const { Novelty } = require('../models/index');
+const { Category } = require('../models/index')
 const imageServices = require('../services/amazonS3/imageServices')
 const { validationResult } = require('express-validator');
 
@@ -55,6 +56,7 @@ const deleteNovelty = async (request, response) => {
                     id: id
                 }
             });
+            await imageServices.deleteImage(noveltyToDelete.image)
             response.status(204).end();
         } else {
             response.status(404).json({ error: 'New not exist' });
@@ -92,6 +94,7 @@ const createNovelty = async (request, response) => {
            response.status(400).json({ error: 'category not exist'});  
         }
       } catch (error) {
+        console.log(error.message)
         response.status(400).json({ error: error.message });
       }
     }    
@@ -116,10 +119,10 @@ const updateNovelty = async (request, response) => {
             const urlOfImage = async () => {
                 if(request.file) {
                     const url = await imageServices.uploadImage(request.file)
-                    await imageServices.deleteImage(body.image)
+                    await imageServices.deleteImage(body.imageUrl)
                     return url
                 } else {
-                    return body.image
+                    return body.imageUrl
                 }
             }
             
