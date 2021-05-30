@@ -1,7 +1,14 @@
 'use strict';
 
+const { User } = require('../models/index');
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+
+    const { dataValues } = await User.findOne({
+      attributes: ["id"]
+    });
+
     await queryInterface.bulkInsert('Activities', [{
       content: `Lorem dolor sit amet, consectetur adipiscing elit. Pellentesque vel mi ut
       velit tempor aliquam eget eget enim. Proin cursus eleifend pretium. Aliquam cursus 
@@ -11,7 +18,7 @@ module.exports = {
       eros id velit condimentum, eu ultrices nisl consequat.`,
       image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       name: 'Activity n1',
-      userId: 1,
+      userId: dataValues.id,
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
