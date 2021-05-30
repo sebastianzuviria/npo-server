@@ -1,13 +1,13 @@
-const { Organization, Socialmediacontact} = require("../models/index");
+const { Organization, Socialmediacontact} = require('../models/index');
 
 const getOrganization = async (req, res) => {
 
     try{
         const organization = await Organization.findOne({
-            attributes: ["name", "image", "phone", "address","welcomeText"],
+            attributes: ['id', 'name', 'image', 'phone', 'address','welcomeText'],
             include: {
-                association: "socialmedia",
-                attributes: ["facebook","instagram","linkedin"]
+                association: 'socialmedia',
+                attributes: ['facebook','instagram','linkedin']
             },
 
         });
@@ -28,11 +28,11 @@ const getOrganization = async (req, res) => {
 
 const updateOrganization = async (req, res) => {
     console.log(req.body);
-    const {name, image, facebook, instagram,linkedin} = req.body
+    const {name, image, facebook, instagram,linkedin, welcomeText} = req.body
     try{
 
         const idOrganization = await Organization.findOne( {
-            attributes: ["id"]
+            attributes: ['id']
         } );
 
         const id= idOrganization.dataValues.id;
@@ -40,6 +40,7 @@ const updateOrganization = async (req, res) => {
         const organizationUpdate = await Organization.update({
             name,
             image,
+            welcomeText
         }, { where: { id } });
 
         const socialmediaUpdate = await Socialmediacontact.update({
