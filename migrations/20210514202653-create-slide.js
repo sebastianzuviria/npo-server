@@ -14,10 +14,16 @@ module.exports = {
       text: {
         type: Sequelize.STRING
       },
-      order: {
-        type: Sequelize.INTEGER
-      },
       organizationId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Organizations',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      order: {
         type: Sequelize.INTEGER
       },
       createdAt: {
