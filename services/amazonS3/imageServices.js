@@ -49,18 +49,22 @@ const uploadImage = async (file) => {
 }
 
 const deleteImage = (imageUrl) => {
-    const urlSplited = imageUrl.split('/')
-    const imageName = urlSplited[urlSplited.length - 1]
+    if(imageUrl && imageUrl?.startsWith(`https://${config[process.env.NODE_ENV].aws_s3_bucket_name}.s3.sa-east-1.amazonaws.com/`)){
+        const urlSplited = imageUrl.split('/')
+        const imageName = urlSplited[urlSplited.length - 1]
 
-    const params = {
-        Bucket: config[process.env.NODE_ENV].aws_s3_bucket_name,
-        Key: imageName
+        const params = {
+            Bucket: config[process.env.NODE_ENV].aws_s3_bucket_name,
+            Key: imageName
+        }
+
+        return new Promise((resolve, reject) => s3.deleteObject(params, (error, data) => {
+            if (error) reject(error)
+            else resolve(data)
+        }))
+    } else {
+        return new Promise((resolve, reject) => resolve({ message: 'Not image at amazon'}))
     }
-
-    return new Promise((resolve, reject) => s3.deleteObject(params, (error, data) => {
-        if (error) reject(error)
-        else resolve(data)
-    }))
 }
 
 const imageServices = {
