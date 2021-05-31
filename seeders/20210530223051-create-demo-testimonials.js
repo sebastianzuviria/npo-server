@@ -6,7 +6,6 @@ module.exports = {
 
       name: 'pedro',
       content: 'Donacion de ropa y productos no pedecederos',
-      userId: 2,
       createdAt: new Date(),
       updatedAt: new Date()
     }],{});

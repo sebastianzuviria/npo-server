@@ -1,17 +1,12 @@
-const { Testimonial, User } = require('../models/index');
+const { Testimonial } = require('../models/index');
 
 const getTestimonials = async (req, res) => {
   
   try {
     const testimonials = await Testimonial.findAll({
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['firstName', 'lastName', 'email', 'image', 'roleId']
-        }
-      ], 
-      attributes: ['id', 'name', 'content', 'userId']
+
+      attributes: ['id', 'name', 'content']
+
     });
     res.status(200).json(testimonials);
   } catch (error) {
@@ -24,14 +19,8 @@ const getTestimonialById = async (req, res) => {
   try {
     testimonial = await Testimonial.findByPk(id, {
 
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['firstName', 'lastName', 'email', 'image', 'roleId']
-        }
-      ],
-      attributes: ['id', 'name', 'content', 'userId']
+      attributes: ['id', 'name', 'content']
+
     });
     if (testimonial) {
       res.status(200).json(testimonial);
@@ -51,8 +40,7 @@ const newTestimonial = async (req, res) => {
   try {
     const newTestimonial = await Testimonial.create({
       name: body.name,
-      content: body.content,
-      userId: body.id
+      content: body.content
     });
     res.status(201).json(newTestimonial);
   } catch (error) {

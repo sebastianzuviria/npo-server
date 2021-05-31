@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Testimonial.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
+      
     }
   }
   Testimonial.init(
