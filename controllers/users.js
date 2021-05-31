@@ -1,6 +1,10 @@
 'use-strict';
 
 const { User, Role } = require('../models/index');
+const {
+  uploadImage,
+  deleteImage
+} = require('../services/amazonS3/imageServices');
 const encryptPassword = require('../utils/encrypt');
 const { signToken, decodeToken } = require('../utils/jsonwebtoken');
 
@@ -115,11 +119,40 @@ const updateRoleId = async (req, res) => {
   }
 };
 
+const updateImage = async (req, res) => {
+  try {
+    // Esto funciona solamente si se usa el middleware userIsLogged
+    const { id } = req.user;
+
+    const { file } = req;
+    if (file === undefined)
+      return res.status(400).json({ message: 'send a image file' });
+
+    const { dataValues } = await User.findByPk(id, { attributes: ['image'] });
+    const { image } = dataValues;
+
+    const imageUrl = await uploadImage(file);
+    if (image) {
+      await deleteImage(image);
+    }
+    const updatedUrl = await User.update(
+      { image: imageUrl },
+      { where: { id } }
+    );
+    if (updatedUrl) {
+      res.status(200).json({ image: imageUrl });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   infoUser,
   registerUser,
   deleteUser,
   getUsers,
   updateProfile,
-  updateRoleId
+  updateRoleId,
+  updateImage
 };

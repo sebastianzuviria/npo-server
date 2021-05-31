@@ -17,7 +17,8 @@ const {
   getUsers,
   registerUser,
   updateProfile,
-  updateRoleId
+  updateRoleId,
+  updateImage
 } = require('../controllers/users');
 const userIsLogged = require('../middlewares/userIsLogged');
 const {
@@ -25,6 +26,7 @@ const {
   valuesAreAlpha,
   validEmail
 } = require('../middlewares/profileUpdateValidation');
+const { uploadMiddleware } = require('../services/amazonS3/imageServices');
 
 /* GET users listing. */
 router.get('/', verifyAdmin, getUsers);
@@ -42,6 +44,7 @@ router.put(
   validEmail,
   updateProfile
 );
+router.put('/updateimage', userIsLogged, uploadMiddleware, updateImage);
 router.put('/:id', verifyAdmin, updateRoleId);
 
 /* POST a new user (register) */
