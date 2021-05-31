@@ -22,7 +22,7 @@ const { uploadImage, deleteImage }= require('../services/amazonS3/imageServices'
     const updateSlide = async (req,res)=> {
 
         const id = req.params.id;
-        const { imageUrl, text, order } = req.body;
+        const { imageUrl, order, text } = req.body;
 
         const urlOfImage = async () => {
 
@@ -50,8 +50,8 @@ const { uploadImage, deleteImage }= require('../services/amazonS3/imageServices'
             return ( !updatedSlide ) ? res.status(400).json( { error: 'Slide not Found' } ) : res.status(200).json( updatedSlide );
             
         } catch(err) {
-            
-            res.status(400).json({error: err.message})
+            console.log( err )
+            res.status(400).json({error: err})
 
         }
     };
