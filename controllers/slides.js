@@ -1,7 +1,7 @@
 'use-strict';
 
 const { Slide } = require('../models/index');
-const imageServices = require('../services/amazonS3/imageServices')
+const { uploadImage, deleteImage }= require('../services/amazonS3/imageServices')
 
     const getSlides = async (req,res)=> {
 
@@ -28,9 +28,8 @@ const imageServices = require('../services/amazonS3/imageServices')
 
             if (req.file) {
     
-                const url = await imageServices.uploadImage(req.file);
-                await imageServices.deleteImage(imageUrl);
-                return url;
+                await deleteImage(imageUrl);
+                return await uploadImage(req.file);
     
             } else {
                 return imageUrl;
