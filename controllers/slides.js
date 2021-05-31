@@ -22,18 +22,18 @@ const imageServices = require('../services/amazonS3/imageServices')
     const updateSlide = async (req,res)=> {
 
         const id = req.params.id;
-        const { text, order } = req.body;
+        const { imageUrl, text, order } = req.body;
 
         const urlOfImage = async () => {
 
             if (req.file) {
     
                 const url = await imageServices.uploadImage(req.file);
-                await imageServices.deleteImage(imageurl);
+                await imageServices.deleteImage(imageUrl);
                 return url;
     
             } else {
-                return imageurl;
+                return imageUrl;
             }
         }
 
