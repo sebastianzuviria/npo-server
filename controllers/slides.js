@@ -9,7 +9,12 @@ const { uploadImage, deleteImage }= require('../services/amazonS3/imageServices'
 
         try {
 
-            const slides = await Slide.findAll({where: { organizationId: id } });
+            const slides = await Slide.findAll({
+                where: { organizationId: id },
+                limit: 3,
+                order: [['order', 'ASC']]
+            });
+
             return res.status(200).json(slides)
             
         } catch(err) {
