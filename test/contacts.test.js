@@ -1,5 +1,6 @@
 const db = require('../models/index');
-const { Contact } = require('../models/index');
+const { Contact, User } = require('../models/index');
+const jwt = require('jsonwebtoken');
 const supertest = require('supertest');
 const app = require('../app');
 const apiTest = supertest(app);
@@ -23,17 +24,40 @@ beforeAll(async () => {
 
 describe('Contacts endpoint test', () => {
   describe('GET contacts', () => {
-    test('Trying to get a list of contacts without token should return 401 error', async () => {
-      await apiTest.get('/contacts').expect(401);
-    });
+    test('Trying to get a list of contacts being a normal user should return 401 error', async () => {
+      const user = await User.findOne({
+        where: { email: 'jose@mail.com' },
+      });
 
-    test('Trying to get a list of contacts with a valid token should return response 200', async () => {
+      const token = jwt.sign(
+        {
+          id: user.dataValues.id,
+          roleId: user.dataValues.roleId,
+        },
+        process.env.SECRET
+      );
       await apiTest
         .get('/contacts')
-        .set(
-          'Authorization',
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlSWQiOjF9.XW9GdvLyY5MsyxilOP9RvijNee1LeyDA6iaw7SuPofc'
-        )
+        .set('Authorization', `Bearer ${token}`)
+        .expect(401);
+    });
+
+    test('Trying to get a list of contacts being admin should return response 200', async () => {
+      const user = await User.findOne({
+        where: { email: 'franco@email.com' },
+      });
+
+      const token = jwt.sign(
+        {
+          id: user.dataValues.id,
+          roleId: user.dataValues.roleId,
+        },
+        process.env.SECRET
+      );
+
+      await apiTest
+        .get('/contacts')
+        .set('Authorization', `Bearer ${token}`)
         .expect(200);
     });
   });
