@@ -20,7 +20,11 @@ const {
   updateRoleId
 } = require('../controllers/users');
 const userIsLogged = require('../middlewares/userIsLogged');
-const updateProfileValidation = require('../middlewares/profileUpdateValidation');
+const {
+  keysAreAccepted,
+  valuesAreAlpha,
+  validEmail
+} = require('../middlewares/profileUpdateValidation');
 
 /* GET users listing. */
 router.get('/', verifyAdmin, getUsers);
@@ -30,7 +34,14 @@ router.get('/auth/me', userIsLogged, infoUser);
 router.delete('/', deleteUser);
 
 // PUT user data and roleId(admin)
-router.put('/', updateProfileValidation, userIsLogged, updateProfile);
+router.put(
+  '/',
+  userIsLogged,
+  keysAreAccepted,
+  valuesAreAlpha,
+  validEmail,
+  updateProfile
+);
 router.put('/:id', verifyAdmin, updateRoleId);
 
 /* POST a new user (register) */
