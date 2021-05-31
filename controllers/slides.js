@@ -50,8 +50,7 @@ const { uploadImage, deleteImage }= require('../services/amazonS3/imageServices'
             return ( !updatedSlide ) ? res.status(400).json( { error: 'Slide not Found' } ) : res.status(200).json( updatedSlide );
             
         } catch(err) {
-            console.log( err )
-            res.status(400).json({error: err})
+            res.status(400).json({error: err.message})
 
         }
     };
