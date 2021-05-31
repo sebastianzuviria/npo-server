@@ -1,5 +1,6 @@
 const { Novelty } = require('../models/index');
-// const { Category } = require('../models/index')
+const { Category } = require('../models/index')
+const imageServices = require('../services/amazonS3/imageServices')
 const { validationResult } = require('express-validator');
 
 
@@ -7,14 +8,10 @@ const getNovelties = async (request, response) => {
 
     try {
         const noveltiesReturned = await Novelty.findAll({
-            // include: {
-            //     model: Category,
-            //     attributes: ['name']
-            // },
             where: {
                 type: 'news'
             }, 
-            attributes: ['id', 'content', 'title', 'image', 'createdAt'],
+            attributes: ['id', 'title', 'image', 'createdAt'],
             order: [['createdAt', 'DESC']]
         });
         response.status(200).json(noveltiesReturned);
@@ -28,11 +25,11 @@ const getNoveltyById = async (request, response) => {
 
     try {
         const noveltyReturned = await Novelty.findByPk(id, {
-            // include: {
-            //     model: Category,
-            //     attributes: ['name']
-            // },
-            attributes: ['id', 'title', 'image', 'content', 'categoryId', 'type', 'createdAt'],
+            include: {
+                association: "category",
+                attributes: ["id","name"],
+            },
+            attributes: ['id', 'title', 'image', 'content', 'type', 'createdAt'],
         });
         if (noveltyReturned){ 
             response.status(200).json(noveltyReturned);
@@ -55,6 +52,7 @@ const deleteNovelty = async (request, response) => {
                     id: id
                 }
             });
+            await imageServices.deleteImage(noveltyToDelete.image)
             response.status(204).end();
         } else {
             response.status(404).json({ error: 'New not exist' });
@@ -65,6 +63,8 @@ const deleteNovelty = async (request, response) => {
 };
 
 const createNovelty = async (request, response) => {
+    console.log('BODY: ', request.body)
+    console.log('FILE: ', request.file)
     const body = request.body;
     const validationErrors = validationResult(request);
 
@@ -75,27 +75,30 @@ const createNovelty = async (request, response) => {
       }).end();
     } else {
       try {
-        // const category = await Category.findOne({ where: { name: body.category }});
-        // if(category) {
-        const newNovelty = await Novelty.create({
-            title: body.title,
-            image: body.image,
-            content: body.content,
-            //categoryId: category.id
-            categoryId: 1,
-            type: 'news'
-        });
+        const category = await Category.findByPk(body.category);
+        if(category) {
+            const urlOfImage = await imageServices.uploadImage(request.file)
+            const newNovelty = await Novelty.create({
+                title: body.title,
+                image: urlOfImage,
+                content: body.content,
+                categoryId: category.id,
+                type: 'news'
+            });
             response.status(201).json(newNovelty);
-        // } else {
-        //   response.status(400).json({ error: 'category not exist'});  
-        // }
+        } else {
+           response.status(400).json({ error: 'category not exist'});  
+        }
       } catch (error) {
+        console.log(error.message)
         response.status(400).json({ error: error.message });
       }
     }    
 }
 
 const updateNovelty = async (request, response) => {
+    console.log('BODY: ', request.body)
+    console.log('FILE: ', request.file)
     const id = request.params.id
     const body = request.body;
     const validationErrors = validationResult(request);
@@ -107,14 +110,23 @@ const updateNovelty = async (request, response) => {
       }).end();
     } else {
       try {
-        // const category = await Category.findOne({ where: { name: body.category }});
-        // if(category) {
+        const category = await Category.findByPk(body.category);
+        if(category) {
+            const urlOfImage = async () => {
+                if(request.file) {
+                    const url = await imageServices.uploadImage(request.file)
+                    await imageServices.deleteImage(body.imageUrl)
+                    return url
+                } else {
+                    return body.imageUrl
+                }
+            }
+            
             const isUpdatedNovelty = await Novelty.update({
                 title: body.title,
-                image: body.image,
+                image: await urlOfImage(),
                 content: body.content,
-                //categoryId: category.id
-                categoryId: 1,
+                categoryId: category.id,
                 type: 'news'
             }, { where: { id: id } });
             if(isUpdatedNovelty[0] === 1) {
@@ -123,9 +135,9 @@ const updateNovelty = async (request, response) => {
             } else {
                 response.status(404).json({ error: 'New not exist'})
             } 
-        // } else {
-        //   response.status(400).json({ error: 'category not exist'});  
-        // }
+        } else {
+           response.status(400).json({ error: 'category not exist'});  
+        }
       } catch (error) {
         response.status(400).json({ error: error.message });
       }

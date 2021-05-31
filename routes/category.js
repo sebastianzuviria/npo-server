@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { verifyAdmin } = require('../middlewares/verifyRoles');
 const { getCategories, createCategory, deleteCategory, updateCategory } = require('../controllers/categories');
 
-router.get('/', verifyAdmin, getCategories);
-router.post('/', verifyAdmin, createCategory);
-router.delete('/:id',verifyAdmin, deleteCategory);
-router.put('/', verifyAdmin, updateCategory);
+router.get('/', getCategories);
+router.post('/', createCategory);
+router.delete('/:id', deleteCategory);
+router.put('/', updateCategory);
 
 module.exports = router;

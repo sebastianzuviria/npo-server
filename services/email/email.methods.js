@@ -6,14 +6,13 @@ module.exports = {
 
     sendMail: async paramsMail => {
 
-        const {to, subject, text, html} = paramsMail;
+        const {to, dynamic_template_data} = paramsMail;
 
         const msg = {
             to,
             from: process.env.SENDGRID_VERIFIED_EMAIL,
-            subject,
-            text,
-            html
+            templateId: process.env.SENDGRID_TEMPLATE_ID,
+            dynamic_template_data
         }
         
         return await send(msg)
