@@ -1,11 +1,12 @@
 const db = require('../models/index');
-const { Organization, Socialmediacontact } = require('../models/index');
+const { Organization, Socialmediacontact, User } = require('../models/index');
 const supertest = require('supertest');
+const jwt = require('jsonwebtoken');
 const app = require('../app');
-
 const api = supertest(app);
 
 const initial = [
+
     {
         name: "Zonas grises",
         image: "image.jpg",
@@ -17,9 +18,11 @@ const initial = [
             linkedin: "https://www.linkedin.com/" 
         }
     }
+    
 ]
 
 beforeAll(async () => {
+
     await Organization.destroy({where: {}})
     await Socialmediacontact.destroy({where: {}})
     
@@ -38,9 +41,9 @@ beforeAll(async () => {
         instagram: initial[0].socialmedia.instagram,
         linkedin: initial[0].socialmedia.linkedin,
         organizationId: organizationCreated.id
-        }
-    );
-  
+
+    });
+
 })
 
 describe('/organizations/public',() => {
@@ -54,22 +57,31 @@ describe('/organizations/public',() => {
 
     })
 
-    
     test('PUT authorized token and id exist', async () => {
+
         const { name, image, address, welcomeText } = initial[0];
         
+        const user = await User.findOne({
+            where: { email: 'jonathan@email.com' }
+        });
+
+        const token = jwt.sign({
+            id: user.dataValues.id, roleId: user.dataValues.roleId
+            }, process.env.SECRET
+        );
+
         const organizationId = await Organization.findOne({attributes: ['id']})
     
         await api
         .put(`/organizations/${organizationId}`)
-        .set('authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlSWQiOjF9.50hjprqNYLSiv1aRpoSNuPxWB9XBC03xfOI4PZ89KUs')
+        .set('authorization', `Bearer ${token}`)
         .send({name: 'editado', image: 'editado.png', address:'editado 123', welcomeText: 'hola'})
         .expect(200)
         .expect('Content-Type', /application\/json/)
+
     })
-    
+
 })
-    
 
 afterAll(() => {
     

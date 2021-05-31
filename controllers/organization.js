@@ -1,15 +1,14 @@
 const { Organization, Socialmediacontact} = require("../models/index");
 const imageServices = require('../services/amazonS3/imageServices')
 
-
 const getOrganization = async (req, res) => {
 
     try{
         const organization = await Organization.findOne({
             attributes: ["id", "name", "image", "phone", "address","welcomeText"],
             include: {
-                association: "socialmedia",
-                attributes: ["facebook","instagram","linkedin"]
+                association: 'socialmedia',
+                attributes: ['facebook','instagram','linkedin']
             },
 
         });
@@ -25,7 +24,6 @@ const getOrganization = async (req, res) => {
         res.status(500).json(err)
     }
 };
-
 
 const updateOrganization = async (req, res) => {
 
@@ -45,7 +43,7 @@ const updateOrganization = async (req, res) => {
     try{
 
         const idOrganization = await Organization.findOne( {
-            attributes: ["id"]
+            attributes: ['id']
         } );
 
         const id= idOrganization.dataValues.id;
