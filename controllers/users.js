@@ -6,7 +6,7 @@ const {
   deleteImage
 } = require('../services/amazonS3/imageServices');
 const encryptPassword = require('../utils/encrypt');
-const { signToken, decodeToken } = require('../utils/jsonwebtoken');
+const { signToken } = require('../utils/jsonwebtoken');
 
 const infoUser = async (req, res) => {
   try {
@@ -34,15 +34,33 @@ const registerUser = async (req, res) => {
 
     if (!userExists) {
       const hash = await encryptPassword(req.body.password);
-      const newUser = await User.create({
+      await User.create({
         firstName,
         lastName,
         email,
         password: hash
       });
+      const createdUser = await User.findOne({
+        where: { email },
+        attributes: [
+          'id',
+          'image',
+          'firstName',
+          'lastName',
+          'email',
+          'password',
+          'roleId'
+        ],
+        include: { model: Role, as: 'role', attributes: ['name'] }
+      });
 
-      const { password, ...dataForToken } = newUser.dataValues;
-      signToken(dataForToken, res);
+      const {
+        password,
+        role: { name },
+        ...dataForToken
+      } = createdUser.dataValues;
+
+      signToken({ ...dataForToken, name }, res);
     } else {
       res.status(409).json({
         message: 'User already registered'
@@ -56,11 +74,11 @@ const registerUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const token = decodeToken(req);
-  if (!token)
-    return res.status(401).json({ error: 'token invalid or missing' });
-  const { id } = token;
+  const { id } = req.params;
   try {
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: 'user not found' });
+
     await User.destroy({ where: { id } });
     return res.status(200).json({ message: 'User deleted successfuly' });
   } catch (error) {
@@ -78,8 +96,9 @@ const getUsers = async (req, res) => {
           attributes: ['name']
         }
       ],
-      attributes: ['firstName', 'lastName', 'roleId']
+      attributes: ['firstName', 'lastName', 'roleId', 'id']
     });
+    console.log(userList);
 
     res.status(200).json(userList);
   } catch (error) {
@@ -91,12 +110,24 @@ const updateProfile = async (req, res) => {
   try {
     // Esto funciona solamente si se usa el middleware userIsLogged
     const { id } = req.user;
-    const userUpdated = await User.update({ ...req.body }, { where: { id } });
+    const dataToUpdate = Object.keys(req.body).reduce((prev, value) => {
+      if (req.body[value].length > 0) {
+        prev[value] = req.body[value];
+        return prev;
+      }
+    }, {});
+
+    const userUpdated = await User.update(
+      { ...dataToUpdate },
+      { where: { id } }
+    );
 
     if (!userUpdated)
       return res.status(404).json({ message: 'User not found' });
 
-    const attributes = Object.keys(req.body);
+    const attributes = Object.keys(req.body).filter(
+      (value) => req.body[value].length > 0
+    );
     const { dataValues: updatedData } = await User.findByPk(id, {
       attributes
     });
