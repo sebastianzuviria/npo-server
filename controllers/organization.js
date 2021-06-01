@@ -1,10 +1,11 @@
-const { Organization, Socialmediacontact} = require('../models/index');
+const { Organization, Socialmediacontact} = require("../models/index");
+const imageServices = require('../services/amazonS3/imageServices')
 
 const getOrganization = async (req, res) => {
 
     try{
         const organization = await Organization.findOne({
-            attributes: ['id', 'name', 'image', 'phone', 'address','welcomeText'],
+            attributes: ["id", "name", "image", "phone", "address","welcomeText"],
             include: {
                 association: 'socialmedia',
                 attributes: ['facebook','instagram','linkedin']
@@ -16,7 +17,6 @@ const getOrganization = async (req, res) => {
             return res.status(404).json( { message: 'Organization not Found' } );
         }
         else{
-            console.log(organization)
             return res.status(200).json(organization);
         }
     }
@@ -25,10 +25,21 @@ const getOrganization = async (req, res) => {
     }
 };
 
-
 const updateOrganization = async (req, res) => {
-    console.log(req.body);
-    const {name, image, facebook, instagram,linkedin, welcomeText} = req.body
+
+    const {name,imageurl, phone, address, facebook, instagram,linkedin} = req.body
+
+    const urlOfImage = async () => {
+        if(req.file) {
+            const url = await imageServices.uploadImage(req.file);
+
+            await imageServices.deleteImage(imageurl);
+            return url
+        } else {
+            return imageurl
+        }
+    }
+
     try{
 
         const idOrganization = await Organization.findOne( {
@@ -39,8 +50,9 @@ const updateOrganization = async (req, res) => {
 
         const organizationUpdate = await Organization.update({
             name,
-            image,
-            welcomeText
+            image: await urlOfImage(),
+            phone,
+            address
         }, { where: { id } });
 
         const socialmediaUpdate = await Socialmediacontact.update({
@@ -55,6 +67,5 @@ const updateOrganization = async (req, res) => {
         res.status(500).json(err)
     }
 };
-
 
 module.exports = {getOrganization, updateOrganization};
