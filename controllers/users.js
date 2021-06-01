@@ -74,7 +74,7 @@ const getUsers = async (req, res) => {
           attributes: ['name']
         }
       ],
-      attributes: ['firstName', 'lastName', 'roleId']
+      attributes: ['firstName', 'lastName', 'roleId', 'id']
     });
 
     res.status(200).json(userList);
