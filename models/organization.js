@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       Organization.hasOne(models.Socialmediacontact, {as: 'socialmedia', foreignKey:"organizationId"});
+      Organization.hasOne(models.Slide, {as: 'slide', foreignKey:"organizationId"});
     }
   };
   Organization.init({

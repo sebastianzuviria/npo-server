@@ -17,6 +17,7 @@ const categoriesRouter = require('./routes/category');
 const noveltyRouter = require('./routes/novelty');
 const testimonialsRouter = require('./routes/testimonial');
 const memberRouter = require('./routes/members');
+const slidesRouter = require('./routes/slides');
 
 const app = express();
 app.use(cors());
@@ -42,6 +43,7 @@ app.use('/categories', categoriesRouter);
 app.use('/news', noveltyRouter);
 app.use('/testimonials', testimonialsRouter);
 app.use('/members', memberRouter);
+app.use('/slides', slidesRouter);
 
 //------EXAMPLE TO USE AMAZON S3 SERVICES TO UPLOAD AND DELETE IMAGE------
 //
