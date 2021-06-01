@@ -3,43 +3,38 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Members', [{
-      name: 'ari',
-      image: 'imagen.jpg',
+      name: 'Ari',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/114.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      name: 'seba',
-      image: 'imagen.jpg',
+      name: 'Seba',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/112.png',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      name: 'jona',
-      image: 'imagen.jpg',
+      name: 'Jona',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/111.png',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      name: 'hugo',
-      image: 'imagen.jpg',
+      name: 'Gaby',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/107.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      name: 'gaby',
-      image: 'imagen.jpg',
+      name: 'Nati',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/109.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      name: 'nati',
-      image: 'imagen.jpg',
+      name: 'Franco',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/108.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      name: 'bruno',
-      image: 'imagen.jpg',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },{
-      name: 'franco',
-      image: 'imagen.jpg',
+      name: 'Emi',
+      image: 'https://ong-team-27.s3-sa-east-1.amazonaws.com/134.jpeg',
       createdAt: new Date(),
       updatedAt: new Date()
     }],{});
