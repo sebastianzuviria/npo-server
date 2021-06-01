@@ -60,7 +60,7 @@ const registerUser = async (req, res) => {
         ...dataForToken
       } = createdUser.dataValues;
 
-      signToken({ ...dataForToken, name }, res);
+      signToken({ ...dataForToken, role: name }, res);
     } else {
       res.status(409).json({
         message: 'User already registered'
