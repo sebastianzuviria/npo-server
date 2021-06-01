@@ -12,16 +12,6 @@ const newContact = {
   message: 'Lorem ipsum sit amet',
 };
 
-beforeAll(async () => {
-  try {
-    await db.sequelize.sync({ force: false });
-    await Contact.destroy({ where: {} });
-    await Contact.create(newContact);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 describe('Contacts endpoint test', () => {
   describe('GET contacts', () => {
     test('Trying to get a list of contacts being a normal user should return 401 error', async () => {
@@ -36,6 +26,14 @@ describe('Contacts endpoint test', () => {
         },
         process.env.SECRET
       );
+
+      /*let adminToken;
+      const adminUserData = await apiTest
+        .post('/auth/login')
+        .send(adminUser)
+        .expect(200);
+      adminToken = adminUserData.body.token;*/
+
       await apiTest
         .get('/contacts')
         .set('Authorization', `Bearer ${token}`)
