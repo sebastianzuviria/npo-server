@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Novelty.init({
     title: DataTypes.STRING,
     content: DataTypes.TEXT,
-    image: DataTypes.STRING,
+    image: DataTypes.TEXT,
     categoryId: DataTypes.INTEGER,
     type: DataTypes.STRING
   }, {
