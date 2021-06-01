@@ -33,7 +33,7 @@ router.get('/', verifyAdmin, getUsers);
 router.get('/auth/me', userIsLogged, infoUser);
 
 /* DELETE (soft or logical) from DB */
-router.delete('/', deleteUser);
+router.delete('/:id', verifyAdmin, deleteUser);
 
 // PUT user data and roleId(admin)
 router.put(
