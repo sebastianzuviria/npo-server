@@ -8,13 +8,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
     }
   }
   Testimonial.init(
     {
       name: DataTypes.STRING,
-      content: DataTypes.TEXT,
+      content: DataTypes.TEXT
     },
     {
       sequelize,

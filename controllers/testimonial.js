@@ -1,9 +1,12 @@
 const { Testimonial } = require('../models/index');
 
 const getTestimonials = async (req, res) => {
+  
   try {
     const testimonials = await Testimonial.findAll({
-      attributes: ['name', 'content', 'id'],
+
+      attributes: ['id', 'name', 'content']
+
     });
     res.status(200).json(testimonials);
   } catch (error) {
@@ -15,7 +18,9 @@ const getTestimonialById = async (req, res) => {
   const id = req.params.id;
   try {
     testimonial = await Testimonial.findByPk(id, {
-      attributes: ['id', 'name', 'content'],
+
+      attributes: ['id', 'name', 'content']
+
     });
     if (testimonial) {
       res.status(200).json(testimonial);
@@ -35,7 +40,7 @@ const newTestimonial = async (req, res) => {
   try {
     const newTestimonial = await Testimonial.create({
       name: body.name,
-      content: body.content,
+      content: body.content
     });
     res.status(201).json(newTestimonial);
   } catch (error) {
