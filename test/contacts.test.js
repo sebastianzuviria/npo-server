@@ -27,13 +27,6 @@ describe('Contacts endpoint test', () => {
         process.env.SECRET
       );
 
-      /*let adminToken;
-      const adminUserData = await apiTest
-        .post('/auth/login')
-        .send(adminUser)
-        .expect(200);
-      adminToken = adminUserData.body.token;*/
-
       await apiTest
         .get('/contacts')
         .set('Authorization', `Bearer ${token}`)
