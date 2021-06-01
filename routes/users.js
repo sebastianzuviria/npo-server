@@ -17,10 +17,16 @@ const {
   getUsers,
   registerUser,
   updateProfile,
-  updateRoleId
+  updateRoleId,
+  updateImage
 } = require('../controllers/users');
 const userIsLogged = require('../middlewares/userIsLogged');
-const updateProfileValidation = require('../middlewares/profileUpdateValidation');
+const {
+  keysAreAccepted,
+  valuesAreAlpha,
+  validEmail
+} = require('../middlewares/profileUpdateValidation');
+const { uploadMiddleware } = require('../services/amazonS3/imageServices');
 
 /* GET users listing. */
 router.get('/', verifyAdmin, getUsers);
@@ -30,7 +36,15 @@ router.get('/auth/me', userIsLogged, infoUser);
 router.delete('/', deleteUser);
 
 // PUT user data and roleId(admin)
-router.put('/', updateProfileValidation, userIsLogged, updateProfile);
+router.put(
+  '/',
+  userIsLogged,
+  keysAreAccepted,
+  valuesAreAlpha,
+  validEmail,
+  updateProfile
+);
+router.put('/updateimage', userIsLogged, uploadMiddleware, updateImage);
 router.put('/:id', verifyAdmin, updateRoleId);
 
 /* POST a new user (register) */
