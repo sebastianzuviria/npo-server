@@ -27,7 +27,7 @@ const getOrganization = async (req, res) => {
 
 const updateOrganization = async (req, res) => {
 
-    const {name,imageurl, phone, address, facebook, instagram,linkedin} = req.body
+    const {name,imageurl, phone, address, facebook, instagram,linkedin, welcomeText} = req.body
 
     const urlOfImage = async () => {
         if(req.file) {
@@ -52,7 +52,8 @@ const updateOrganization = async (req, res) => {
             name,
             image: await urlOfImage(),
             phone,
-            address
+            address,
+            welcomeText
         }, { where: { id } });
 
         const socialmediaUpdate = await Socialmediacontact.update({
